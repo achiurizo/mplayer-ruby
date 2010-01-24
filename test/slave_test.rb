@@ -91,7 +91,36 @@ context "MPlayer::Player" do
 
   context "speed_incr" do
     setup { mock_stdin @player, "speed_incr 5" }
-    asserts("speed_incr") { @player.speed_incr 5 }
+    asserts("speed_incr 5") { @player.speed_incr 5 }
+  end
+  
+  context "speed_mult" do
+    setup { mock_stdin @player, "speed_mult 5" }
+    asserts("speed_mult 5") { @player.speed_mult 5 }
+  end
+  
+  context "speed_set" do
+    setup { mock_stdin @player, "speed_set 5" }
+    asserts("speed_set 5") { @player.speed_set 5 }
+  end
+  
+  context "speed" do
+    
+    context "increment" do
+      setup { mock(@player).speed_incr(5) { true } }
+      asserts("speed 5,:increment") { @player.speed 5,:increment }
+    end
+    
+    context "multiply" do
+      setup { mock(@player).speed_mult(5) { true } }
+      asserts("speed 5,:multiply") { @player.speed 5,:multiply }
+    end
+    
+    context "set" do
+      setup { 2.times { mock(@player).speed_set(5) { true } } }
+      asserts("speed 5") {  @player.speed 5 }
+      asserts("speed 5, :set") {  @player.speed 5,:set }
+    end
   end
   
 end
