@@ -1,9 +1,8 @@
 require File.expand_path("teststrap", File.dirname(__FILE__))
 
 context "MPlayer::Player" do
-  setup do
-    @player = MPlayer::Player.new('test.mp3')
-  end
+  setup { @player = MPlayer::Player.new('test.mp3') }
+
   asserts("@file").assigns(:file)
   asserts("@pid").assigns(:pid)
   asserts("@stdin").assigns(:stdin)
@@ -11,61 +10,62 @@ context "MPlayer::Player" do
   asserts("@stderr").assigns(:stderr)
 
   context "pause" do
-    setup do
-      mock(@player.stdin).puts("pause") { true }
-      @player.pause
-    end
-    asserts("returns true")
+    setup { mock_stdin @player, "pause" }
+    asserts("returns true") { @player.pause }
   end
 
   context "quit" do
-    setup do
-      mock(@player.stdin).puts("quit") { true }
-      @player.quit
-    end
-    asserts("returns true")
+    setup { mock_stdin @player, "quit" }
+    asserts("returns true") { mock_stdin @player, "quit" }
   end
 
   context "volume" do
     context "increases" do
-      setup do
-        mock(@player.stdin).puts("volume 1") { true }
-        @player.volume :up
-      end
-      asserts("returns true")
+      setup { mock_stdin @player, "volume 1" }
+      asserts("returns true") { @player.volume :up }
     end
-    
+
     context "decreases" do
-      setup do
-        mock(@player.stdin).puts("volume 0") { true }
-        @player.volume :down
-      end
-      asserts("returns true")
+      setup { mock_stdin @player, "volume 0" }
+      asserts("returns true") { @player.volume :down }
     end
-    
+
     context "sets volume" do
-      setup do
-        mock(@player.stdin).puts("volume 40 1") { true }
-        @player.volume :set,40
-      end
-      asserts("returns true")
+      setup { mock_stdin @player, "volume 40 1" }
+      asserts("returns true") { @player.volume :set,40 }
     end
-    
+
     context "incorrect action" do
       setup { @player.volume :boo }
       asserts("returns false").equals false
-    end  
+    end
   end
-  
+
   context "get meta_info" do
     setup do
       metas = %w[get_meta_album get_meta_artist get_meta_comment get_meta_genre get_meta_title get_meta_track get_meta_year]
-      metas.each do |meta|
-        mock(@player.stdin).puts(meta) { true }
-      end
+      metas.each { |meta| mock_stdin @player,meta }
       @player.meta_info
     end
     asserts("returns hash").equals({:album=>true,:artist=>true,:comment=>true,:genre=>true,:title=>true,:track=>true,:year=>true})
+  end
+
+  context "seek" do
+    context "by relative" do
+      setup { 2.times { mock_stdin @player, "seek 5 0" } }
+      asserts("seek 5") { @player.seek 5 }
+      asserts("seek 5,:relative") { @player.seek 5,:relative }
+    end
+
+    context "by percentage" do
+      setup { mock_stdin @player, "seek 5 1" }
+      asserts("seek 5,:percent") { @player.seek 5,:percent }
+    end
+
+    context "by absolute" do
+      setup { mock_stdin @player, "seek 5 2" }
+      asserts("seek 5,:absolute") { @player.seek 5,:absolute }
+    end
   end
 
 end

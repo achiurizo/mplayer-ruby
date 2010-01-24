@@ -42,14 +42,21 @@ module MPlayer
       {:album => album,:artist => artist, :comment => comment, :genre => genre, :title => title, :track => track, :year => year}
     end
     
+    def seek(value,type = :relative)
+      case type
+      when :percent then send "seek #{value} 1"
+      when :absolute then send "seek #{value} 2"
+      else
+        send "seek #{value} 0"
+      end
+      return true
+    end
+    
+    
     private
     
-    def send(cmd)
-      @stdin.puts(cmd)
-    end
+    def send(cmd); @stdin.puts(cmd); end
     
-    def meta(field)
-      "get_meta_%s" % field
-    end
+    def meta(field); "get_meta_#{field}"; end
   end
 end
