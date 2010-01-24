@@ -179,5 +179,19 @@ context "MPlayer::Player" do
       asserts("loop :set, 5") { @player.loop :set, 5 }
     end
   end
+  
+  context "sub_delay" do
+    
+    context "absolute" do
+      setup { 2.times { mock_stdin @player, "sub_delay 5 1" } }
+      asserts("sub_delay 5") {  @player.sub_delay 5 }
+      asserts("sub_delay 5, :relative") { @player.sub_delay 5,:absolute }
+    end
+    
+    context "relative" do
+      setup { mock_stdin @player, "sub_delay 5 0" }
+      asserts("sub_delay 5, :absolute") { @player.sub_delay 5, :relative }
+    end
+  end
 
 end

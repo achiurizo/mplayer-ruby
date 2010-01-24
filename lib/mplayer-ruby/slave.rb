@@ -80,7 +80,13 @@ module MPlayer
       else "loop 0"
       end
     end
-
+    
+    # Adjust the subtitle delay
+    # :relative is adjust by +/- <value> seconds. 
+    # :absolute is set it to <value>. (default)
+    def sub_delay(value,type = :absolute)
+      send(type == :relative ? "sub_delay #{value} 0" : "sub_delay #{value} 1")
+    end
 
     # Go to the next/previous entry in the playtree. The sign of <value> tells
     # the direction.  If no entry is available in the given direction it will do
