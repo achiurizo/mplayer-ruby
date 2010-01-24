@@ -54,8 +54,18 @@ context "MPlayer::Player" do
     context "incorrect action" do
       setup { @player.volume :boo }
       asserts("returns false").equals false
+    end  
+  end
+  
+  context "get meta_info" do
+    setup do
+      metas = %w[get_meta_album get_meta_artist get_meta_comment get_meta_genre get_meta_title get_meta_track get_meta_year]
+      metas.each do |meta|
+        mock(@player.stdin).puts(meta) { true }
+      end
+      @player.meta_info
     end
-    
+    asserts("returns hash").equals({:album=>true,:artist=>true,:comment=>true,:genre=>true,:title=>true,:track=>true,:year=>true})
   end
 
 end

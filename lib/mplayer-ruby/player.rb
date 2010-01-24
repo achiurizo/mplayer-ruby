@@ -10,11 +10,11 @@ module MPlayer
     end
     
     def pause
-      @stdin.puts("pause") ; return true
+      send("pause") ; return true
     end
     
     def quit
-      @stdin.puts("quit") ; return true
+      send('quit') ; return true
     end
     
     def volume(action,value=30)
@@ -26,9 +26,30 @@ module MPlayer
       else
         return false
       end
-      @stdin.puts(cmd)
+      send cmd
       return true
     end
     
+    def meta_info
+      meta = "get_meta_%s"
+      album = send meta('album')
+      artist = send meta('artist')
+      comment = send meta('comment')
+      genre = send meta('genre')
+      title = send meta('title')
+      track = send meta('track')
+      year = send meta('year')
+      {:album => album,:artist => artist, :comment => comment, :genre => genre, :title => title, :track => track, :year => year}
+    end
+    
+    private
+    
+    def send(cmd)
+      @stdin.puts(cmd)
+    end
+    
+    def meta(field)
+      "get_meta_%s" % field
+    end
   end
 end
