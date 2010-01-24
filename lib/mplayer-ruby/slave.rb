@@ -108,6 +108,12 @@ module MPlayer
     def pt_up_step(value,force = :no_force)
       send(force == :force ? "pt_up_step #{value} 1" : "pt_up_step #{value} 0")
     end
+    
+    # Toggle OSD mode
+    # or set it to <level>
+    def osd(level=nil)
+      send(level.nil? ? "osd" : "osd #{level}")
+    end
 
     # When more than one source is available it selects the next/previous one.
     # ASX Playlist ONLY    

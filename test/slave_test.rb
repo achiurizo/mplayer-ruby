@@ -209,4 +209,18 @@ context "MPlayer::Player" do
     end
   end
 
+  context "osd" do
+    
+    context "toggle" do
+      setup { mock_stdin @player, "osd" }
+      asserts("osd toggle") { @player.osd }
+    end
+    
+    context "set level" do
+      setup { mock_stdin @player, "osd 5" }
+      asserts("osd 5") { @player.osd 5 }
+    end
+  end
+
+
 end
