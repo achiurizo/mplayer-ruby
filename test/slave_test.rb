@@ -161,4 +161,23 @@ context "MPlayer::Player" do
     asserts("returns true") { @player.alt_src_step 5 }
   end
 
+  context "loop" do
+    
+    context "none" do
+      setup { mock_stdin @player,"loop -1" }
+      asserts("loop :none") { @player.loop :none }
+    end
+    
+    context "forever" do
+      setup { 2.times { mock_stdin @player, "loop 0" } }
+      asserts("loop") { @player.loop }
+      asserts("loop :forever") { @player.loop :forever }
+    end
+    
+    context "set value" do
+      setup { mock_stdin @player,"loop 5" }
+      asserts("loop :set, 5") { @player.loop :set, 5 }
+    end
+  end
+
 end

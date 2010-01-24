@@ -68,6 +68,19 @@ module MPlayer
       else speed_set(value)
       end
     end
+    
+    # Adjust/set how many times the movie should be looped. 
+    # :none means no loop
+    # :forever means loop forever.(default)
+    # :set sets the amount of times to loop. defaults to one loop.
+    def loop(action = :forever,value = 1)
+      send case action
+      when :none then "loop -1"
+      when :set then "loop #{value}"
+      else "loop 0"
+      end
+    end
+
 
     # Go to the next/previous entry in the playtree. The sign of <value> tells
     # the direction.  If no entry is available in the given direction it will do
