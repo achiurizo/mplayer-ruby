@@ -1,7 +1,7 @@
 require File.expand_path("teststrap", File.dirname(__FILE__))
 
 context "MPlayer::Player" do
-  setup { @player = MPlayer::Player.new('test.mp3') }
+  setup { @player = MPlayer::Slave.new('test.mp3') }
 
   asserts("@file").assigns(:file)
   asserts("@pid").assigns(:pid)

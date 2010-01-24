@@ -1,5 +1,5 @@
 module MPlayer
-  class Player
+  class Slave
     attr_accessor :stdin
     attr_reader :pid,:stdout,:stderr,:file
 
