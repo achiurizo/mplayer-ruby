@@ -53,7 +53,7 @@ module MPlayer
     # If type is :relative adjust the delay by <value> seconds.
     # If type is :absolute, set the delay to <value> seconds.     
     def audio_delay(value,type = :relative)
-      type == :relative ? send("audio_delay #{value} 0") : send("audio_delay #{value} 1")
+      send(type == :relative ? "audio_delay #{value} 0" : "audio_delay #{value} 1")
     end
 
 
@@ -68,6 +68,23 @@ module MPlayer
       else speed_set(value)
       end
     end
+
+    # Go to the next/previous entry in the playtree. The sign of <value> tells
+    # the direction.  If no entry is available in the given direction it will do
+    # nothing unless [force] is non-zero.
+    def pt_step(value,force = :no_force)
+      send(force == :force ? "pt_step #{value} 1" : "pt_step #{value} 0")
+    end
+
+    # Similar to pt_step but jumps to the next/previous entry in the parent list.
+    # Useful to break out of the inner loop in the playtree.
+    def pt_up_step(value,force = :no_force)
+      send(force == :force ? "pt_up_step #{value} 1" : "pt_up_step #{value} 0")
+    end
+
+    # When more than one source is available it selects the next/previous one.
+    # ASX Playlist ONLY    
+    def alt_src_step(value); send("alt_src_step #{value}"); end
 
     # Add <value> to the current playback speed.
     def speed_incr(value); send("speed_incr #{value}"); end
