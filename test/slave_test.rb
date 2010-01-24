@@ -194,4 +194,19 @@ context "MPlayer::Player" do
     end
   end
 
+  context "sub_step" do
+    
+    context "forward" do
+      setup { 2.times { mock_stdin @player, "sub_step 5" } }
+      asserts("sub_step 5") { @player.sub_step 5 }
+      asserts("sub_step 5,:forward") { @player.sub_step 5, :forward }
+    end
+    
+    context "backward" do
+      setup { 2.times { mock_stdin @player, "sub_step -5" } }
+      asserts("sub_step -5") { @player.sub_step -5 }
+      asserts("sub_step 5,:backward") { @player.sub_step 5,:backward }
+    end
+  end
+
 end

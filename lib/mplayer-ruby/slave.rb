@@ -87,6 +87,14 @@ module MPlayer
     def sub_delay(value,type = :absolute)
       send(type == :relative ? "sub_delay #{value} 0" : "sub_delay #{value} 1")
     end
+    
+    # Step forward in the subtitle list by <value> steps
+    # step backwards if <value> is negative
+    # can also set type to :backward or :forward and return postive <value>
+    def sub_step(value, type = :forward)
+      type = :backward if value < 0
+      send(type == :forward ? "sub_step #{value.abs}" : "sub_step -#{value.abs}" )
+    end
 
     # Go to the next/previous entry in the playtree. The sign of <value> tells
     # the direction.  If no entry is available in the given direction it will do
