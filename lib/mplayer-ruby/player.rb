@@ -17,5 +17,18 @@ module MPlayer
       @stdin.puts("quit") ; return true
     end
     
+    def volume(action,value=30)
+      cmd =
+      case action
+      when :up then "volume 1"
+      when :down then "volume 0"
+      when :set then "volume #{value} 1"
+      else
+        return false
+      end
+      @stdin.puts(cmd)
+      return true
+    end
+    
   end
 end
