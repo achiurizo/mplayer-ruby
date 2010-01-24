@@ -78,6 +78,9 @@ module MPlayer
     # Set the speed to <value>.
     def speed_set(value); send("speed_set #{value}"); end
 
+    # Play one frame, then pause again.
+    def frame_step; send("frame_step"); end
+
     # Write the current position into the EDL file.
     def edl_mark; send("edl_mark"); end
 

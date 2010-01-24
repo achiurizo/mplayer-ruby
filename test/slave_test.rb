@@ -123,4 +123,9 @@ context "MPlayer::Player" do
     end
   end
   
+  context "frame_step" do
+    setup { mock_stdin @player, "frame_step" }
+    asserts("returns true") { @player.frame_step }
+  end
+  
 end
