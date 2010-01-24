@@ -20,6 +20,7 @@ context "MPlayer::Player" do
   end
 
   context "volume" do
+    
     context "increases" do
       setup { mock_stdin @player, "volume 1" }
       asserts("returns true") { @player.volume :up }
@@ -51,6 +52,7 @@ context "MPlayer::Player" do
   end
 
   context "seek" do
+    
     context "by relative" do
       setup { 2.times { mock_stdin @player, "seek 5 0" } }
       asserts("seek 5") { @player.seek 5 }
@@ -65,6 +67,25 @@ context "MPlayer::Player" do
     context "by absolute" do
       setup { mock_stdin @player, "seek 5 2" }
       asserts("seek 5,:absolute") { @player.seek 5,:absolute }
+    end
+  end
+
+  context "edl_mark" do
+    setup { mock_stdin @player, "edl_mark"}
+    asserts("returns true") { @player.edl_mark }
+  end
+  
+  context "audio_delay" do
+    
+    context "by relative" do
+      setup { 2.times { mock_stdin @player, "audio_delay 5 0" } }
+      asserts("audio_delay 5") { @player.audio_delay 5 }
+      asserts("audio_delay 5,:relative") {  @player.audio_delay 5,:relative }
+    end
+    
+    context "by absolute" do
+      setup { mock_stdin @player, "audio_delay 5 1" }
+      asserts("audio_delay 5,:relative") {  @player.audio_delay 5,:absolute }
     end
   end
 
