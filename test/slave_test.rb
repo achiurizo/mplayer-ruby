@@ -89,4 +89,9 @@ context "MPlayer::Player" do
     end
   end
 
+  context "speed_incr" do
+    setup { mock_stdin @player, "speed_incr 5" }
+    asserts("speed_incr") { @player.speed_incr 5 }
+  end
+  
 end

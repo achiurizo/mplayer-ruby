@@ -57,6 +57,9 @@ module MPlayer
       type == :relative ? send("audio_delay #{value} 0") : send("audio_delay #{value} 1")
     end
 
+    # Add <value> to the current playback speed.
+    def speed_incr(value); send("speed_incr #{value}"); end
+
     # Write the current position into the EDL file.
     def edl_mark; send("edl_mark"); end
 
