@@ -222,5 +222,41 @@ context "MPlayer::Player" do
     end
   end
 
+  context "osd_show_text" do
+    
+    context "with just string" do
+      setup { mock_stdin @player, "osd_show_text hello 0 0"}
+      asserts("mock_stdin 'hello'") { @player.osd_show_text 'hello' }
+    end
+    
+    context "with duration" do
+      setup { mock_stdin @player, "osd_show_text hello 5 0"}
+      asserts("mock_stdin 'hello',:duration => 5") { @player.osd_show_text 'hello', :duration => 5 }
+    end
+    
+    context "with level" do
+      setup { mock_stdin @player, "osd_show_text hello 0 5"}
+      asserts("mock_stdin 'hello', :level => 5") { @player.osd_show_text 'hello', :level => 5 }
+    end
+  end
+
+  context "osd_show_property_text" do
+    
+    context "with just string" do
+      setup { mock_stdin @player, "osd_show_property_text hello 0 0"}
+      asserts("mock_stdin 'hello'") { @player.osd_show_property_text 'hello' }
+    end
+    
+    context "with duration" do
+      setup { mock_stdin @player, "osd_show_property_text hello 5 0"}
+      asserts("mock_stdin 'hello',:duration => 5") { @player.osd_show_property_text 'hello', :duration => 5 }
+    end
+    
+    context "with level" do
+      setup { mock_stdin @player, "osd_show_property_text hello 0 5"}
+      asserts("mock_stdin 'hello', :level => 5") { @player.osd_show_property_text 'hello', :level => 5 }
+    end
+    
+  end
 
 end

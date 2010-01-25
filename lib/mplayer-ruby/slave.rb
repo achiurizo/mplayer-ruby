@@ -115,6 +115,23 @@ module MPlayer
       send(level.nil? ? "osd" : "osd #{level}")
     end
 
+    # Show <string> on the OSD.
+    # :duration sets the length to display text.
+    # :level sets the osd level to display at. (default: 0 => always show)
+    def osd_show_text(string,options = {})
+      options.reverse_merge!({:duration => 0, :level => 0})
+      send("osd_show_text #{string} #{options[:duration]} #{options[:level]}")
+    end
+
+    # Show an expanded property string on the OSD
+    # see -playing-msg for a list of available expansions
+    # :duration sets the length to display text.
+    # :level sets the osd level to display at. (default: 0 => always show)
+    def osd_show_property_text(string,options={})
+      options.reverse_merge!({:duration => 0, :level => 0})
+      send("osd_show_property_text #{string} #{options[:duration]} #{options[:level]}")
+    end
+
     # When more than one source is available it selects the next/previous one.
     # ASX Playlist ONLY    
     def alt_src_step(value); send("alt_src_step #{value}"); end
