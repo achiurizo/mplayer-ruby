@@ -252,15 +252,19 @@ module MPlayer
     # Loads the file into MPlayer
     # :append loads the file and appends it to the current playlist
     # :no_append will stop playback and play new loaded file
-    def load_file(value,append = :no_append)
-      
+    def load_file(file,append = :no_append)
+      raise ArgumentError,"Invalid File" unless File.exists? file
+      switch = (append == :append ? 1 : 0)
+      send "loadfile #{file} #{switch}"
     end
     
     # Loads the playlist into MPlayer
     # :append loads the playlist and appends it to the current playlist
     # :no_append will stop playback and play new loaded playlist
-    def load_list(value,append = :no_append)
-      
+    def load_list(file,append = :no_append)
+      raise ArgumentError,"Invalid File" unless File.exists? file
+      switch = (append == :append ? 1 : 0)
+      send "loadlist #{file} #{switch}"
     end
 
     # When more than one source is available it selects the next/previous one.

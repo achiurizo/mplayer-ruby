@@ -410,4 +410,34 @@ context "MPlayer::Player" do
     end
   end
 
+  context "load_file" do
+    
+    asserts("invalid file") { @player.load_file 'booger' }.raises ArgumentError,"Invalid File"
+    context "append" do
+      setup { mock_stdin @player, "loadfile test/test.mp3 1" }
+      asserts("load_file test/test.mp3, :append") { @player.load_file 'test/test.mp3', :append }
+    end
+    
+    context "no append" do
+      setup { 2.times { mock_stdin @player, "loadfile test/test.mp3 0" } }
+      asserts("load_file test/test.mp3") { @player.load_file 'test/test.mp3' }
+      asserts("load_file test/test.mp3, :no_append") { @player.load_file 'test/test.mp3', :no_append }
+    end
+  end
+  
+  context "load_list" do
+    
+    asserts("invalid playlist") { @player.load_list 'booger' }.raises ArgumentError,"Invalid File"
+    context "append" do
+      setup { mock_stdin @player, "loadlist test/test.mp3 1" }
+      asserts("load_list test/test.mp3, :append") { @player.load_list 'test/test.mp3', :append }
+    end
+    
+    context "no append" do
+      setup { 2.times { mock_stdin @player, "loadlist test/test.mp3 0" } }
+      asserts("load_list test/test.mp3") { @player.load_list 'test/test.mp3' }
+      asserts("load_list test/test.mp3, :no_append") { @player.load_list 'test/test.mp3', :no_append }
+    end
+  end
+
 end
