@@ -1,8 +1,10 @@
 require File.expand_path("teststrap", File.dirname(__FILE__))
 
 context "MPlayer::Player" do
-  setup { @player = MPlayer::Slave.new('test.mp3') }
-
+  setup do
+    mock(Open4).popen4("/usr/bin/mplayer -slave -quiet test.mp3") { [true,true,true,true] }
+    @player = MPlayer::Slave.new('test.mp3')
+  end
   asserts("@file").assigns(:file)
   asserts("@pid").assigns(:pid)
   asserts("@stdin").assigns(:stdin)
@@ -85,7 +87,7 @@ context "MPlayer::Player" do
 
     context "by absolute" do
       setup { mock_stdin @player, "audio_delay 5 1" }
-      asserts("audio_delay 5,:relative") {  @player.audio_delay 5,:absolute }
+      asserts("audio_delay 5,:absolute") {  @player.audio_delay 5,:absolute }
     end
   end
 
@@ -281,40 +283,95 @@ context "MPlayer::Player" do
     end
   end
 
-%w[contrast gamma brightness hue saturation].each do |setting|
-  context setting do
+  %w[contrast gamma brightness hue saturation].each do |setting|
+    context setting do
 
-    context "relative" do
-      setup { 2.times { mock_stdin @player, "#{setting} 5 0"} }
-      asserts("#{setting} 5, :relative") { @player.method(setting).call(5, :relative) }
-      asserts("#{setting} 5") { @player.method(setting).call(5) }
+      context "relative" do
+        setup { 2.times { mock_stdin @player, "#{setting} 5 0"} }
+        asserts("#{setting} 5, :relative") { @player.method(setting).call(5, :relative) }
+        asserts("#{setting} 5") { @player.method(setting).call(5) }
+      end
+
+      context "absolute" do
+        setup { mock_stdin @player, "#{setting} 5 1" }
+        asserts("#{setting} 5, :absolute") { @player.method(setting).call( 5, :absolute) }
+      end
+
+      asserts("value out of range [-100,100]") { @player.method(setting).call(1000) }.raises(ArgumentError,"Value out of Range -100..100")
     end
-
-    context "absolute" do
-      setup { mock_stdin @player, "#{setting} 5 1" }
-      asserts("#{setting} 5, :absolute") { @player.method(setting).call( 5, :absolute) }
-    end
-
-    asserts("value out of range [-100,100]") { @player.method(setting).call(1000) }.raises(ArgumentError,"Value out of Range -100..100")
   end
-end
 
   context "frame_drop" do
-    
+
     context "toggle" do
       setup { mock_stdin @player, "frame_drop"}
       asserts("toggles") { @player.frame_drop }
     end
-    
+
     context "on" do
       setup { mock_stdin @player, "frame_drop 1"}
       asserts("frame_drop :on") { @player.frame_drop :on }
     end
-    
+
     context "off" do
       setup { mock_stdin @player, "frame_drop 0"}
       asserts("frame_drop :off") { @player.frame_drop :off }
     end
+  end
+
+  context "sub_pos" do
+    context "by relative" do
+      setup { 2.times { mock_stdin @player, "sub_pos 5 0" } }
+      asserts("sub_pos 5") { @player.sub_pos 5 }
+      asserts("sub_pos 5,:relative") {  @player.sub_pos 5,:relative }
+    end
+
+    context "by absolute" do
+      setup { mock_stdin @player, "sub_pos 5 1" }
+      asserts("sub_pos 5,:absolute") {  @player.sub_pos 5,:absolute }
+    end
+  end
+
+  context "sub_alignment" do
+
+    context "toggle" do
+      setup { mock_stdin @player, "sub_alignment" }
+      asserts("returns true") { @player.sub_alignment }
+    end
+
+    context "top" do
+      setup { mock_stdin @player, "sub_alignment 0" }
+      asserts("sub_alignment :top") { @player.sub_alignment :top }
+    end
+
+    context "center" do
+      setup { mock_stdin @player, "sub_alignment 1" }
+      asserts("sub_alignment :top") { @player.sub_alignment :center }
+    end
+
+    context "bottom" do
+      setup { mock_stdin @player, "sub_alignment 2" }
+      asserts("sub_alignment :top") { @player.sub_alignment :bottom }
+    end
+  end
+
+  context "sub_visibility" do
+    
+    context "toggle" do
+      setup { mock_stdin @player, "sub_visibility" }
+      asserts("sub_visiblity") { @player.sub_visibility }
+    end
+    
+    context "on" do
+      setup { mock_stdin @player, "sub_visibility 1" }
+      asserts("sub_visibility :on") { @player.sub_visibility :on }
+    end
+    
+    context "off" do
+      setup { mock_stdin @player, "sub_visibility 0" }
+      asserts("sub_visibility :off") { @player.sub_visibility :off }
+    end
+    
   end
 
 end

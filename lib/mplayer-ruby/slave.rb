@@ -141,12 +141,8 @@ module MPlayer
 
     # Toggle sound output muting or set it to [value] when [value] >= 0
     #     (1 == on, 0 == off).
-    def mute(toggle=nil)
-      send case toggle
-      when :on then "mute 1"
-      when :off then "mute 0"
-      else "mute"
-      end
+    def mute(value = nil)
+      toggle :mute, value
     end
     
     # Set/adjust video parameters.
@@ -194,12 +190,38 @@ module MPlayer
     # if :off, turns off dropping mode
     # call by itself toggles dropping mode
     def frame_drop(value = nil)
-      send case value
-      when :on then "frame_drop 1"
-      when :off then "frame_drop 0"
-      else "frame_drop"
+      toggle :frame_drop, value
+    end
+    
+    # Adjust/set subtitle position.
+    # If :relative, modifies parameter by <value>.
+    # If :absolute, parameter is set to <value>.
+    def sub_pos(value,type = :relative)
+      adjust_set :sub_pos, value, type
+    end
+    
+    # Toggle/set subtitle alignment. [alignment]
+    # :top sets top alignment
+    # :center sets center alignment
+    # :bottom sets bottom alignment
+    def sub_alignment(alignment = nil)
+      send case alignment
+      when :top then "sub_alignment 0"
+      when :center then "sub_alignment 1"
+      when :bottom then "sub_alignment 2"
+      else "sub_alignment"
       end
     end
+    
+    # Toggle/set subtitle visibility.
+    # :on turns on visilibity.
+    # :off turns off visilibility.
+    # else toggles visibility.
+    def sub_visibility(value = nil)
+      toggle :sub_visibility, value
+    end
+    
+    
     
     # When more than one source is available it selects the next/previous one.
     # ASX Playlist ONLY    
@@ -229,9 +251,17 @@ module MPlayer
 
     private
 
-    def setting(setting,value,type)
+    def toggle(command,value)
+      send case value
+      when :on then "#{command} 1"
+      when :off then "#{command} 0"
+      else "#{command}"
+      end
+    end
+
+    def setting(command,value,type)
       raise(ArgumentError,"Value out of Range -100..100") unless (-100..100).include?(value)
-      adjust_set setting, value, type
+      adjust_set command, value, type
     end
 
     def adjust_set(command,value,type = :relative)
