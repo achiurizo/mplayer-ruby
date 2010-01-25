@@ -1,6 +1,6 @@
 = mplayer-ruby
 
-Description goes here.
+A Ruby Wrapper for MPlayer.
 
 == Note on Patches/Pull Requests
  
