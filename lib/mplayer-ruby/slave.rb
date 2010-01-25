@@ -53,7 +53,7 @@ module MPlayer
     # If type is :relative adjust the delay by <value> seconds.
     # If type is :absolute, set the delay to <value> seconds.     
     def audio_delay(value,type = :relative)
-      send(type == :relative ? "audio_delay #{value} 0" : "audio_delay #{value} 1")
+      adjust_set :audio_delay, value, type
     end
 
 
@@ -85,7 +85,7 @@ module MPlayer
     # :relative is adjust by +/- <value> seconds. 
     # :absolute is set it to <value>. (default)
     def sub_delay(value,type = :absolute)
-      send(type == :relative ? "sub_delay #{value} 0" : "sub_delay #{value} 1")
+      adjust_set :sub_delay, value, type
     end
     
     # Step forward in the subtitle list by <value> steps
@@ -131,6 +131,63 @@ module MPlayer
       options.reverse_merge!({:duration => 0, :level => 0})
       send("osd_show_property_text #{string} #{options[:duration]} #{options[:level]}")
     end
+    
+    def balance(value,type = :relative)
+      #TODO
+    end
+
+    # Switch volume control between master and PCM.
+    def use_master; send("use_master"); end
+
+    # Toggle sound output muting or set it to [value] when [value] >= 0
+    #     (1 == on, 0 == off).
+    def mute(toggle=nil)
+      send case toggle
+      when :on then "mute 1"
+      when :off then "mute 0"
+      else "mute"
+      end
+    end
+    
+    # Set/adjust video parameters.
+    # If [abs] is not given or is zero, modifies parameter by <value>.
+    # If [abs] is non-zero, parameter is set to <value>.
+    # <value> is in the range [-100, 100].
+    def contrast(value, type = :relative)
+      setting :contrast, value, type
+    end
+    
+    # Set/adjust video parameters.
+    # If [abs] is not given or is zero, modifies parameter by <value>.
+    # If [abs] is non-zero, parameter is set to <value>.
+    # <value> is in the range [-100, 100].
+    def gamma(value, type = :relative)
+      setting :gamma, value, type
+    end
+    
+    # Set/adjust video parameters.
+    # If [abs] is not given or is zero, modifies parameter by <value>.
+    # If [abs] is non-zero, parameter is set to <value>.
+    # <value> is in the range [-100, 100].
+    def hue(value, type = :relative)
+      setting :hue, value, type
+    end
+    
+    # Set/adjust video parameters.
+    # If [abs] is not given or is zero, modifies parameter by <value>.
+    # If [abs] is non-zero, parameter is set to <value>.
+    # <value> is in the range [-100, 100].
+    def brightness(value, type = :relative)
+      setting :brightness, value, type
+    end
+    
+    # Set/adjust video parameters.
+    # If [abs] is not given or is zero, modifies parameter by <value>.
+    # If [abs] is non-zero, parameter is set to <value>.
+    # <value> is in the range [-100, 100].
+    def saturation(value, type = :relative)
+      setting :saturation, value, type
+    end
 
     # When more than one source is available it selects the next/previous one.
     # ASX Playlist ONLY    
@@ -159,6 +216,16 @@ module MPlayer
 
 
     private
+
+    def setting(setting,value,type)
+      raise(ArgumentError,"Value out of Range -100..100") unless (-100..100).include?(value)
+      adjust_set setting, value, type
+    end
+
+    def adjust_set(command,value,type = :relative)
+      switch = ( type == :relative ? 0 : 1 )
+      send "#{command} #{value} #{switch}"
+    end
 
     def send(cmd); @stdin.puts(cmd); return true; end
 

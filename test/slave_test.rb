@@ -129,26 +129,26 @@ context "MPlayer::Player" do
   end
 
   context "pt_step" do
-    
+
     context "forced" do
       setup { mock_stdin @player, "pt_step 5 1"}
       asserts("pt_step 5, :force") { @player.pt_step 5, :force }
     end
-    
+
     context "not forced" do
       setup { 2.times { mock_stdin @player, "pt_step 5 0" } }
       asserts("pt_step 5") {  @player.pt_step 5 }
       asserts("pt_step 5, :no_force") { @player.pt_step 5, :no_force }
     end
   end
-  
+
   context "pt_up_step" do
-    
+
     context "forced" do
       setup { mock_stdin @player, "pt_up_step 5 1"}
       asserts("pt_up_step 5, :force") { @player.pt_up_step 5, :force }
     end
-    
+
     context "not forced" do
       setup { 2.times { mock_stdin @player, "pt_up_step 5 0" } }
       asserts("pt_up_step 5") {  @player.pt_up_step 5 }
@@ -162,32 +162,32 @@ context "MPlayer::Player" do
   end
 
   context "loop" do
-    
+
     context "none" do
       setup { mock_stdin @player,"loop -1" }
       asserts("loop :none") { @player.loop :none }
     end
-    
+
     context "forever" do
       setup { 2.times { mock_stdin @player, "loop 0" } }
       asserts("loop") { @player.loop }
       asserts("loop :forever") { @player.loop :forever }
     end
-    
+
     context "set value" do
       setup { mock_stdin @player,"loop 5" }
       asserts("loop :set, 5") { @player.loop :set, 5 }
     end
   end
-  
+
   context "sub_delay" do
-    
+
     context "absolute" do
       setup { 2.times { mock_stdin @player, "sub_delay 5 1" } }
       asserts("sub_delay 5") {  @player.sub_delay 5 }
       asserts("sub_delay 5, :relative") { @player.sub_delay 5,:absolute }
     end
-    
+
     context "relative" do
       setup { mock_stdin @player, "sub_delay 5 0" }
       asserts("sub_delay 5, :absolute") { @player.sub_delay 5, :relative }
@@ -195,13 +195,13 @@ context "MPlayer::Player" do
   end
 
   context "sub_step" do
-    
+
     context "forward" do
       setup { 2.times { mock_stdin @player, "sub_step 5" } }
       asserts("sub_step 5") { @player.sub_step 5 }
       asserts("sub_step 5,:forward") { @player.sub_step 5, :forward }
     end
-    
+
     context "backward" do
       setup { 2.times { mock_stdin @player, "sub_step -5" } }
       asserts("sub_step -5") { @player.sub_step -5 }
@@ -210,12 +210,12 @@ context "MPlayer::Player" do
   end
 
   context "osd" do
-    
+
     context "toggle" do
       setup { mock_stdin @player, "osd" }
       asserts("osd toggle") { @player.osd }
     end
-    
+
     context "set level" do
       setup { mock_stdin @player, "osd 5" }
       asserts("osd 5") { @player.osd 5 }
@@ -223,17 +223,17 @@ context "MPlayer::Player" do
   end
 
   context "osd_show_text" do
-    
+
     context "with just string" do
       setup { mock_stdin @player, "osd_show_text hello 0 0"}
       asserts("mock_stdin 'hello'") { @player.osd_show_text 'hello' }
     end
-    
+
     context "with duration" do
       setup { mock_stdin @player, "osd_show_text hello 5 0"}
       asserts("mock_stdin 'hello',:duration => 5") { @player.osd_show_text 'hello', :duration => 5 }
     end
-    
+
     context "with level" do
       setup { mock_stdin @player, "osd_show_text hello 0 5"}
       asserts("mock_stdin 'hello', :level => 5") { @player.osd_show_text 'hello', :level => 5 }
@@ -241,22 +241,62 @@ context "MPlayer::Player" do
   end
 
   context "osd_show_property_text" do
-    
+
     context "with just string" do
       setup { mock_stdin @player, "osd_show_property_text hello 0 0"}
       asserts("mock_stdin 'hello'") { @player.osd_show_property_text 'hello' }
     end
-    
+
     context "with duration" do
       setup { mock_stdin @player, "osd_show_property_text hello 5 0"}
       asserts("mock_stdin 'hello',:duration => 5") { @player.osd_show_property_text 'hello', :duration => 5 }
     end
-    
+
     context "with level" do
       setup { mock_stdin @player, "osd_show_property_text hello 0 5"}
       asserts("mock_stdin 'hello', :level => 5") { @player.osd_show_property_text 'hello', :level => 5 }
     end
-    
   end
+
+  context "use_master" do
+    setup { mock_stdin @player, "use_master" }
+    asserts("returns true") { @player.use_master }
+  end
+
+  context "mute" do
+
+    context "toggle" do
+      setup { mock_stdin @player, "mute"}
+      asserts("returns true") { @player.mute }
+    end
+
+    context "set on" do
+      setup { mock_stdin @player, "mute 1"}
+      asserts("mute :on") { @player.mute :on }
+    end
+
+    context "set off" do
+      setup { mock_stdin @player, "mute 0"}
+      asserts("mute :off") { @player.mute :off }
+    end
+  end
+
+%w[contrast gamma brightness hue saturation].each do |setting|
+  context setting do
+
+    context "relative" do
+      setup { 2.times { mock_stdin @player, "#{setting} 5 0"} }
+      asserts("#{setting} 5, :relative") { @player.method(setting).call(5, :relative) }
+      asserts("#{setting} 5") { @player.method(setting).call(5) }
+    end
+
+    context "absolute" do
+      setup { mock_stdin @player, "#{setting} 5 1" }
+      asserts("#{setting} 5, :absolute") { @player.method(setting).call( 5, :absolute) }
+    end
+
+    asserts("value out of range [-100,100]") { @player.method(setting).call(1000) }.raises(ArgumentError,"Value out of Range -100..100")
+  end
+end
 
 end
