@@ -371,7 +371,43 @@ context "MPlayer::Player" do
       setup { mock_stdin @player, "sub_visibility 0" }
       asserts("sub_visibility :off") { @player.sub_visibility :off }
     end
+  end
+  
+  context "sub_load" do
     
+    asserts("invalid file") { @player.sub_load "booger" }.raises ArgumentError,"Invalid File"
+    context "valid file" do
+      setup { mock_stdin @player, "sub_load test/test.mp3" }
+      asserts("sub_load 'test/test.mp3'") { @player.sub_load "test/test.mp3" }
+    end
+  end
+
+  context "sub_remove" do
+    
+    context "all" do
+      setup { 2.times { mock_stdin @player, "sub_remove -1" } }
+      asserts("sub_remove") { @player.sub_remove }
+      asserts("sub_remove :all") { @player.sub_remove :all }
+    end
+    
+    context "index" do
+      setup { mock_stdin @player, "sub_remove 1" }
+      asserts("sub_remove 1") { @player.sub_remove 1 }
+    end
+  end
+
+  context "sub_select" do
+    
+    context "select" do
+      setup { mock_stdin @player, "sub_select 1" }
+      asserts("sub_select 1") { @player.sub_select 1 }
+    end
+    
+    context "cycle" do
+      setup { 2.times { mock_stdin @player, "sub_select -2" } }
+      asserts("sub_select") { @player.sub_select }
+      asserts("sub_select :cycle") { @player.sub_select :cycle }
+    end
   end
 
 end

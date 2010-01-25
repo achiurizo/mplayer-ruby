@@ -48,10 +48,10 @@ module MPlayer
       else "seek #{value} 0"
       end
     end
-    
+
     # Set/adjust the audio delay.
     # If type is :relative adjust the delay by <value> seconds.
-    # If type is :absolute, set the delay to <value> seconds.     
+    # If type is :absolute, set the delay to <value> seconds.
     def audio_delay(value,type = :relative)
       adjust_set :audio_delay, value, type
     end
@@ -68,8 +68,8 @@ module MPlayer
       else speed_set(value)
       end
     end
-    
-    # Adjust/set how many times the movie should be looped. 
+
+    # Adjust/set how many times the movie should be looped.
     # :none means no loop
     # :forever means loop forever.(default)
     # :set sets the amount of times to loop. defaults to one loop.
@@ -80,14 +80,14 @@ module MPlayer
       else "loop 0"
       end
     end
-    
+
     # Adjust the subtitle delay
-    # :relative is adjust by +/- <value> seconds. 
+    # :relative is adjust by +/- <value> seconds.
     # :absolute is set it to <value>. (default)
     def sub_delay(value,type = :absolute)
       adjust_set :sub_delay, value, type
     end
-    
+
     # Step forward in the subtitle list by <value> steps
     # step backwards if <value> is negative
     # can also set type to :backward or :forward and return postive <value>
@@ -108,7 +108,7 @@ module MPlayer
     def pt_up_step(value,force = :no_force)
       send(force == :force ? "pt_up_step #{value} 1" : "pt_up_step #{value} 0")
     end
-    
+
     # Toggle OSD mode
     # or set it to <level>
     def osd(level=nil)
@@ -131,9 +131,10 @@ module MPlayer
       options.reverse_merge!({:duration => 0, :level => 0})
       send("osd_show_property_text #{string} #{options[:duration]} #{options[:level]}")
     end
-    
+
     def balance(value,type = :relative)
       #TODO
+      return false
     end
 
     # Switch volume control between master and PCM.
@@ -144,7 +145,7 @@ module MPlayer
     def mute(value = nil)
       toggle :mute, value
     end
-    
+
     # Set/adjust video parameters.
     # If :relative, modifies parameter by <value>.
     # If :absolute, parameter is set to <value>.
@@ -152,7 +153,7 @@ module MPlayer
     def contrast(value, type = :relative)
       setting :contrast, value, type
     end
-    
+
     # Set/adjust video parameters.
     # If :relative, modifies parameter by <value>.
     # If :absolute, parameter is set to <value>.
@@ -160,7 +161,7 @@ module MPlayer
     def gamma(value, type = :relative)
       setting :gamma, value, type
     end
-    
+
     # Set/adjust video parameters.
     # If :relative, modifies parameter by <value>.
     # If :absolute, parameter is set to <value>.
@@ -168,7 +169,7 @@ module MPlayer
     def hue(value, type = :relative)
       setting :hue, value, type
     end
-    
+
     # Set/adjust video parameters.
     # If :relative, modifies parameter by <value>.
     # If :absolute, parameter is set to <value>.
@@ -176,7 +177,7 @@ module MPlayer
     def brightness(value, type = :relative)
       setting :brightness, value, type
     end
-    
+
     # Set/adjust video parameters.
     # If :relative, modifies parameter by <value>.
     # If :absolute, parameter is set to <value>.
@@ -192,14 +193,14 @@ module MPlayer
     def frame_drop(value = nil)
       toggle :frame_drop, value
     end
-    
+
     # Adjust/set subtitle position.
     # If :relative, modifies parameter by <value>.
     # If :absolute, parameter is set to <value>.
     def sub_pos(value,type = :relative)
       adjust_set :sub_pos, value, type
     end
-    
+
     # Toggle/set subtitle alignment. [alignment]
     # :top sets top alignment
     # :center sets center alignment
@@ -212,7 +213,7 @@ module MPlayer
       else "sub_alignment"
       end
     end
-    
+
     # Toggle/set subtitle visibility.
     # :on turns on visilibity.
     # :off turns off visilibility.
@@ -220,19 +221,58 @@ module MPlayer
     def sub_visibility(value = nil)
       toggle :sub_visibility, value
     end
+
+    # Loads subtitles from <file>.
+    def sub_load(file)
+      raise ArgumentError, "Invalid File" unless File.exists? file
+      send("sub_load #{file}")
+    end
+
+    # Removes the selected sub file
+    # :all removes all sub files. (Default)
+    # <value> removes the sub file at that index.
+    def sub_remove(value = :all)
+      cmd = (value == :all ? -1 : value)
+      send "sub_remove #{cmd}"
+    end
+
+    def vobsub_lang(value = nil)
+      # TODO
+      return false
+    end
     
+    # Displays subtitle
+    # :cycle will cycle through all sub_titles. (Default)
+    # <value> will display the sub_title at that index.
+    def sub_select(value = :cycle)
+      cmd = (value == :cycle ? -2 : value)
+      send "sub_select #{cmd}"
+    end
+
+    # Loads the file into MPlayer
+    # :append loads the file and appends it to the current playlist
+    # :no_append will stop playback and play new loaded file
+    def load_file(value,append = :no_append)
+      
+    end
     
-    
+    # Loads the playlist into MPlayer
+    # :append loads the playlist and appends it to the current playlist
+    # :no_append will stop playback and play new loaded playlist
+    def load_list(value,append = :no_append)
+      
+    end
+
     # When more than one source is available it selects the next/previous one.
-    # ASX Playlist ONLY    
+    # ASX Playlist ONLY
     def alt_src_step(value); send("alt_src_step #{value}"); end
 
     # Add <value> to the current playback speed.
     def speed_incr(value); send("speed_incr #{value}"); end
-    
+
     # Multiply the current speed by <value>.
     def speed_mult(value); send("speed_mult #{value}"); end
-    
+
     # Set the speed to <value>.
     def speed_set(value); send("speed_set #{value}"); end
 
