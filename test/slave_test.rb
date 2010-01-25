@@ -299,4 +299,22 @@ context "MPlayer::Player" do
   end
 end
 
+  context "frame_drop" do
+    
+    context "toggle" do
+      setup { mock_stdin @player, "frame_drop"}
+      asserts("toggles") { @player.frame_drop }
+    end
+    
+    context "on" do
+      setup { mock_stdin @player, "frame_drop 1"}
+      asserts("frame_drop :on") { @player.frame_drop :on }
+    end
+    
+    context "off" do
+      setup { mock_stdin @player, "frame_drop 0"}
+      asserts("frame_drop :off") { @player.frame_drop :off }
+    end
+  end
+
 end

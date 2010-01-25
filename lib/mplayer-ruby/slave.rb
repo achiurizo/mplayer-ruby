@@ -5,7 +5,7 @@ module MPlayer
 
     def initialize(file)
       @file = file
-      mplayer = "/usr/bin/mplayer -slave #{@file}"
+      mplayer = "/usr/bin/mplayer -slave -quiet #{@file}"
       @pid,@stdin,@stdout,@stderr = Open4.popen4(mplayer)
     end
 
@@ -150,45 +150,57 @@ module MPlayer
     end
     
     # Set/adjust video parameters.
-    # If [abs] is not given or is zero, modifies parameter by <value>.
-    # If [abs] is non-zero, parameter is set to <value>.
+    # If :relative, modifies parameter by <value>.
+    # If :absolute, parameter is set to <value>.
     # <value> is in the range [-100, 100].
     def contrast(value, type = :relative)
       setting :contrast, value, type
     end
     
     # Set/adjust video parameters.
-    # If [abs] is not given or is zero, modifies parameter by <value>.
-    # If [abs] is non-zero, parameter is set to <value>.
+    # If :relative, modifies parameter by <value>.
+    # If :absolute, parameter is set to <value>.
     # <value> is in the range [-100, 100].
     def gamma(value, type = :relative)
       setting :gamma, value, type
     end
     
     # Set/adjust video parameters.
-    # If [abs] is not given or is zero, modifies parameter by <value>.
-    # If [abs] is non-zero, parameter is set to <value>.
+    # If :relative, modifies parameter by <value>.
+    # If :absolute, parameter is set to <value>.
     # <value> is in the range [-100, 100].
     def hue(value, type = :relative)
       setting :hue, value, type
     end
     
     # Set/adjust video parameters.
-    # If [abs] is not given or is zero, modifies parameter by <value>.
-    # If [abs] is non-zero, parameter is set to <value>.
+    # If :relative, modifies parameter by <value>.
+    # If :absolute, parameter is set to <value>.
     # <value> is in the range [-100, 100].
     def brightness(value, type = :relative)
       setting :brightness, value, type
     end
     
     # Set/adjust video parameters.
-    # If [abs] is not given or is zero, modifies parameter by <value>.
-    # If [abs] is non-zero, parameter is set to <value>.
+    # If :relative, modifies parameter by <value>.
+    # If :absolute, parameter is set to <value>.
     # <value> is in the range [-100, 100].
     def saturation(value, type = :relative)
       setting :saturation, value, type
     end
 
+    # Toggle/set frame dropping mode
+    # if :on, turns on dropping mode
+    # if :off, turns off dropping mode
+    # call by itself toggles dropping mode
+    def frame_drop(value = nil)
+      send case value
+      when :on then "frame_drop 1"
+      when :off then "frame_drop 0"
+      else "frame_drop"
+      end
+    end
+    
     # When more than one source is available it selects the next/previous one.
     # ASX Playlist ONLY    
     def alt_src_step(value); send("alt_src_step #{value}"); end
