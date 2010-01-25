@@ -249,6 +249,44 @@ module MPlayer
       send "sub_select #{cmd}"
     end
 
+    #  Display first subtitle from <value>
+    #  :sub for SUB_SOURCE_SUBS for file subs
+    #  :vobsub for  SUB_SOURCE_VOBSUB for VOBsub files
+    #  : demux SUB_SOURCE_DEMUX for subtitle embedded in the media file or DVD subs.
+    #  :off will turn off subtitle display.
+    #  :cycle will cycle between the first subtitle of each currently available sources.
+    def sub_source(value = :cycle)
+      switch = case value
+      when :sub then 0
+      when :vobsub then 1
+      when :demux then 2
+      when :off then -1
+      when :cycle then -2
+      end
+      send "sub_source #{switch}"
+    end
+    
+    # Display subtitle specifid by <value> for file subs. corresponding to ID_FILE_SUB_ID
+    # :off turns off sub
+    # :cycle will cycle all file subs. (Default)
+    def sub_vob(value = :cycle)
+      select_cycle :sub_vob, value
+    end
+    
+    # Display subtitle specifid by <value> for file subs. corresponding to ID_VOBSUB_ID
+    # :off turns off sub
+    # :cycle will cycle all file subs. (Default)
+    def sub_file(value = :cycle)
+      select_cycle :sub_file, value
+    end
+    
+    # Display subtitle specifid by <value> for file subs. corresponding to ID_SUBTITLE_ID
+    # :off turns off sub
+    # :cycle will cycle all file subs. (Default)
+    def sub_demux(value = :cycle)
+      select_cycle :sub_demux, value
+    end
+
     # Loads the file into MPlayer
     # :append loads the file and appends it to the current playlist
     # :no_append will stop playback and play new loaded file
@@ -294,6 +332,15 @@ module MPlayer
 
 
     private
+
+    def select_cycle(command,value)
+      switch = case value
+      when :off then -1
+      when :cycle then -2
+      else value
+      end
+      send "#{command} #{switch}"
+    end
 
     def toggle(command,value)
       send case value

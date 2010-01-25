@@ -356,25 +356,25 @@ context "MPlayer::Player" do
   end
 
   context "sub_visibility" do
-    
+
     context "toggle" do
       setup { mock_stdin @player, "sub_visibility" }
       asserts("sub_visiblity") { @player.sub_visibility }
     end
-    
+
     context "on" do
       setup { mock_stdin @player, "sub_visibility 1" }
       asserts("sub_visibility :on") { @player.sub_visibility :on }
     end
-    
+
     context "off" do
       setup { mock_stdin @player, "sub_visibility 0" }
       asserts("sub_visibility :off") { @player.sub_visibility :off }
     end
   end
-  
+
   context "sub_load" do
-    
+
     asserts("invalid file") { @player.sub_load "booger" }.raises ArgumentError,"Invalid File"
     context "valid file" do
       setup { mock_stdin @player, "sub_load test/test.mp3" }
@@ -383,13 +383,13 @@ context "MPlayer::Player" do
   end
 
   context "sub_remove" do
-    
+
     context "all" do
       setup { 2.times { mock_stdin @player, "sub_remove -1" } }
       asserts("sub_remove") { @player.sub_remove }
       asserts("sub_remove :all") { @player.sub_remove :all }
     end
-    
+
     context "index" do
       setup { mock_stdin @player, "sub_remove 1" }
       asserts("sub_remove 1") { @player.sub_remove 1 }
@@ -397,12 +397,12 @@ context "MPlayer::Player" do
   end
 
   context "sub_select" do
-    
+
     context "select" do
       setup { mock_stdin @player, "sub_select 1" }
       asserts("sub_select 1") { @player.sub_select 1 }
     end
-    
+
     context "cycle" do
       setup { 2.times { mock_stdin @player, "sub_select -2" } }
       asserts("sub_select") { @player.sub_select }
@@ -410,29 +410,81 @@ context "MPlayer::Player" do
     end
   end
 
+  context "sub_source" do
+
+    context "sub" do
+      setup { mock_stdin @player, "sub_source 0" }
+      asserts("sub_source :sub") { @player.sub_source :sub }
+    end
+
+    context "vobsub" do
+      setup { mock_stdin @player, "sub_source 1"}
+      asserts("sub_source :vobsub") { @player.sub_source :vobsub }
+    end
+
+    context "demux" do
+      setup { mock_stdin @player, "sub_source 2" }
+      asserts("sub_source :demux") { @player.sub_source :demux }
+    end
+
+    context "off" do
+      setup { mock_stdin @player, "sub_source -1" }
+      asserts("sub_source :off") { @player.sub_source :off }
+    end
+
+    context "cycle" do
+      setup { 2.times { mock_stdin @player, "sub_source -2" } }
+      asserts("sub_source :cycle") { @player.sub_source :cycle }
+      asserts("sub_source") { @player.sub_source }
+    end
+  end
+
+  %w[sub_file sub_vob sub_demux].each do |sub|
+
+    context sub do
+
+      context "index" do
+        setup { mock_stdin @player, "#{sub} 1" }
+        asserts("#{sub} 1") { @player.method(sub).call 1 }
+      end
+
+      context "off" do
+        setup { mock_stdin @player, "#{sub} -1" }
+        asserts("#{sub} :off") { @player.method(sub).call :off}
+      end
+
+      context "cycle" do
+        setup { 2.times { mock_stdin @player, "#{sub} -2" } }
+        asserts("#{sub} :cycle") { @player.method(sub).call :cycle }
+        asserts("#{sub}") { @player.method(sub).call }
+      end
+    end
+  end
+
+
   context "load_file" do
-    
+
     asserts("invalid file") { @player.load_file 'booger' }.raises ArgumentError,"Invalid File"
     context "append" do
       setup { mock_stdin @player, "loadfile test/test.mp3 1" }
       asserts("load_file test/test.mp3, :append") { @player.load_file 'test/test.mp3', :append }
     end
-    
+
     context "no append" do
       setup { 2.times { mock_stdin @player, "loadfile test/test.mp3 0" } }
       asserts("load_file test/test.mp3") { @player.load_file 'test/test.mp3' }
       asserts("load_file test/test.mp3, :no_append") { @player.load_file 'test/test.mp3', :no_append }
     end
   end
-  
+
   context "load_list" do
-    
+
     asserts("invalid playlist") { @player.load_list 'booger' }.raises ArgumentError,"Invalid File"
     context "append" do
       setup { mock_stdin @player, "loadlist test/test.mp3 1" }
       asserts("load_list test/test.mp3, :append") { @player.load_list 'test/test.mp3', :append }
     end
-    
+
     context "no append" do
       setup { 2.times { mock_stdin @player, "loadlist test/test.mp3 0" } }
       asserts("load_list test/test.mp3") { @player.load_list 'test/test.mp3' }
