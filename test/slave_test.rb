@@ -2,9 +2,10 @@ require File.expand_path("teststrap", File.dirname(__FILE__))
 
 context "MPlayer::Player" do
   setup do
-    mock(Open4).popen4("/usr/bin/mplayer -slave -quiet test.mp3") { [true,true,true,true] }
-    @player = MPlayer::Slave.new('test.mp3')
+    mock(Open4).popen4("/usr/bin/mplayer -slave -quiet test/test.mp3") { [true,true,true,true] }
+    @player = MPlayer::Slave.new('test/test.mp3')
   end
+  asserts("invalid file") { MPlayer::Slave.new('boooger') }.raises ArgumentError,"Invalid File"
   asserts("@file").assigns(:file)
   asserts("@pid").assigns(:pid)
   asserts("@stdin").assigns(:stdin)
@@ -44,14 +45,14 @@ context "MPlayer::Player" do
     end
   end
 
-  context "get meta_info" do
-    setup do
-      metas = %w[get_meta_album get_meta_artist get_meta_comment get_meta_genre get_meta_title get_meta_track get_meta_year]
-      metas.each { |meta| mock_stdin @player,meta }
-      @player.meta_info
-    end
-    asserts("returns hash").equals({:album=>true,:artist=>true,:comment=>true,:genre=>true,:title=>true,:track=>true,:year=>true})
-  end
+  # context "get meta_info" do
+  #   setup do
+  #     metas = %w[get_meta_album get_meta_artist get_meta_comment get_meta_genre get_meta_title get_meta_track get_meta_year]
+  #     metas.each { |meta| mock_stdin @player,meta }
+  #     @player.meta_info
+  #   end
+  #   asserts("returns hash").equals({:album=>true,:artist=>true,:comment=>true,:genre=>true,:title=>true,:track=>true,:year=>true})
+  # end
 
   context "seek" do
 
@@ -458,6 +459,19 @@ context "MPlayer::Player" do
         asserts("#{sub} :cycle") { @player.method(sub).call :cycle }
         asserts("#{sub}") { @player.method(sub).call }
       end
+    end
+  end
+
+  context "sub_scale" do
+    context "by relative" do
+      setup { 2.times { mock_stdin @player, "sub_scale 5 0" } }
+      asserts("sub_scale 5") { @player.sub_scale 5 }
+      asserts("sub_scale 5,:relative") {  @player.sub_scale 5,:relative }
+    end
+
+    context "by absolute" do
+      setup { mock_stdin @player, "sub_scale 5 1" }
+      asserts("sub_scale 5,:absolute") {  @player.sub_scale 5,:absolute }
     end
   end
 

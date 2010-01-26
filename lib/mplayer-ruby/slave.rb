@@ -3,7 +3,8 @@ module MPlayer
     attr_accessor :stdin
     attr_reader :pid,:stdout,:stderr,:file
 
-    def initialize(file)
+    def initialize(file = "")
+      raise ArgumentError,"Invalid File" unless File.exists?(file)
       @file = file
       mplayer = "/usr/bin/mplayer -slave -quiet #{@file}"
       @pid,@stdin,@stdout,@stderr = Open4.popen4(mplayer)
@@ -26,15 +27,16 @@ module MPlayer
 
     # Returns a hash of the meta information of the file.
     def meta_info
-      meta = "get_meta_%s"
-      album = send meta('album')
-      artist = send meta('artist')
-      comment = send meta('comment')
-      genre = send meta('genre')
-      title = send meta('title')
-      track = send meta('track')
-      year = send meta('year')
-      {:album => album,:artist => artist, :comment => comment, :genre => genre, :title => title, :track => track, :year => year}
+      #TODO
+      # meta = "get_meta_%s"
+      # album = send meta('album')
+      # artist = send meta('artist')
+      # comment = send meta('comment')
+      # genre = send meta('genre')
+      # title = send meta('title')
+      # track = send meta('track')
+      # year = send meta('year')
+      # {:album => album,:artist => artist, :comment => comment, :genre => genre, :title => title, :track => track, :year => year}
     end
 
     # Seek to some place in the file
@@ -285,6 +287,19 @@ module MPlayer
     # :cycle will cycle all file subs. (Default)
     def sub_demux(value = :cycle)
       select_cycle :sub_demux, value
+    end
+    
+    def sub_log
+      #TODO
+      send("sub_log")
+      @stdout.gets
+    end
+    
+    # Adjust the subtitle size by +/- <value> 
+    # :set set it to <value>
+    # :relative adjusts it by value
+    def sub_scale(value,type = :relative)
+      adjust_set :sub_scale, value, type
     end
 
     # Loads the file into MPlayer
