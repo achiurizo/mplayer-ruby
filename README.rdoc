@@ -2,6 +2,14 @@
 
 A Ruby Wrapper for MPlayer.
 
+
+== TODO
+* Complete Slave Protocol 
+* Complete Other Functionalities
+* Create a Better README
+* RDoc?
+* Example Usages
+
 == Note on Patches/Pull Requests
  
 * Fork the project.

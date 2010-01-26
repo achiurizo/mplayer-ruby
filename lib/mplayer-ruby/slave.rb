@@ -302,6 +302,41 @@ module MPlayer
       adjust_set :sub_scale, value, type
     end
 
+    # switch_audio [value] (currently MPEG*, AVI, Matroska and streams handled by libavformat)
+    #     Switch to the audio track with the ID [value]. Cycle through the
+    #     available tracks if [value] is omitted or negative.
+    def switch_audio(value = :cycle)
+      select_cycle :switch_audio, value
+    end
+    # switch_angle [value] (DVDs only)
+    #     Switch to the DVD angle with the ID [value]. Cycle through the
+    #     available angles if [value] is omitted or negative.
+    def switch_angle(value = :cycle)
+      select_cycle :switch_angle, value
+    end
+    
+    # switch_title [value] (DVDNAV only)
+    #     Switch to the DVD title with the ID [value]. Cycle through the
+    #     available titles if [value] is omitted or negative.
+    def switch_title(value = :cycle)
+      select_cycle :switch_title, value
+    end 
+    
+    # switch_ratio [value]
+    #     Change aspect ratio at runtime. [value] is the new aspect ratio expressed
+    #     as a float (e.g. 1.77778 for 16/9).
+    #     There might be problems with some video filters.
+    #
+    def switch_ratio(value); send("switch_ratio #{value}"); end
+    
+    # switch_vsync [value]
+    #     Toggle vsync (1 == on, 0 == off). If [value] is not provided,
+    #     vsync status is inverted.
+    def switch_vsync(value = nil)
+      toggle :switch_vsync, value
+    end
+
+
     # Loads the file into MPlayer
     # :append loads the file and appends it to the current playlist
     # :no_append will stop playback and play new loaded file

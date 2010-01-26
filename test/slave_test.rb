@@ -475,6 +475,45 @@ context "MPlayer::Player" do
     end
   end
 
+  %w[switch_angle switch_audio switch_title].each do |switch|
+
+    context switch do
+
+      context "select" do
+        setup { mock_stdin @player, "#{switch} 1" }
+        asserts("#{switch} 1") { @player.method(switch).call 1 }
+      end
+
+      context "cycle" do
+        setup { 2.times { mock_stdin @player, "#{switch} -2" } }
+        asserts("#{switch}") { @player.method(switch).call }
+        asserts("#{switch} :cycle") { @player.method(switch).call :cycle }
+      end
+
+    end
+  end
+
+  context "switch_ratio" do
+    setup { mock_stdin @player,"switch_ratio 1" }
+    asserts("switch_ratio 1") { @player.switch_ratio 1 }
+  end
+  
+  context "switch_vsync" do
+    context "toggle" do
+      setup { mock_stdin @player, "switch_vsync" }
+      asserts("switch_vsynce") { @player.switch_vsync }
+    end
+
+    context "on" do
+      setup { mock_stdin @player, "switch_vsync 1" }
+      asserts("switch_vsync :on") { @player.switch_vsync :on }
+    end
+
+    context "off" do
+      setup { mock_stdin @player, "switch_vsync 0" }
+      asserts("switch_vsync :off") { @player.switch_vsync :off }
+    end
+  end
 
   context "load_file" do
 
