@@ -497,7 +497,7 @@ context "MPlayer::Player" do
     setup { mock_stdin @player,"switch_ratio 1" }
     asserts("switch_ratio 1") { @player.switch_ratio 1 }
   end
-  
+
   context "switch_vsync" do
     context "toggle" do
       setup { mock_stdin @player, "switch_vsync" }
@@ -512,6 +512,18 @@ context "MPlayer::Player" do
     context "off" do
       setup { mock_stdin @player, "switch_vsync 0" }
       asserts("switch_vsync :off") { @player.switch_vsync :off }
+    end
+  end
+
+  context "get" do
+
+    %w[time_position timelength filename video_codec video_bitrate video_resolution
+      audio_codec audio_bitrate audio_samples meta_title meta_artist meta_album
+    meta_year meta_comment meta_track meta_genre].each do |info|
+      context info do
+        setup { mock_stdin @player, "get_#{info}" }
+        asserts("get :#{info}") { @player.get info.to_sym }
+      end
     end
   end
 

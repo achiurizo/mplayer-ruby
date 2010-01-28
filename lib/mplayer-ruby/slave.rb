@@ -8,6 +8,8 @@ module MPlayer
       @file = file
       mplayer = "/usr/bin/mplayer -slave -quiet #{@file}"
       @pid,@stdin,@stdout,@stderr = Open4.popen4(mplayer)
+      @stdout.sync = true
+      until @stdout.gets.inspect =~ /playback/ do; end #fast forward to the desired output
     end
 
     # Increase/decrease volume
@@ -242,7 +244,7 @@ module MPlayer
       # TODO
       return false
     end
-    
+
     # Displays subtitle
     # :cycle will cycle through all sub_titles. (Default)
     # <value> will display the sub_title at that index.
@@ -267,35 +269,35 @@ module MPlayer
       end
       send "sub_source #{switch}"
     end
-    
+
     # Display subtitle specifid by <value> for file subs. corresponding to ID_FILE_SUB_ID
     # :off turns off sub
     # :cycle will cycle all file subs. (Default)
     def sub_vob(value = :cycle)
       select_cycle :sub_vob, value
     end
-    
+
     # Display subtitle specifid by <value> for file subs. corresponding to ID_VOBSUB_ID
     # :off turns off sub
     # :cycle will cycle all file subs. (Default)
     def sub_file(value = :cycle)
       select_cycle :sub_file, value
     end
-    
+
     # Display subtitle specifid by <value> for file subs. corresponding to ID_SUBTITLE_ID
     # :off turns off sub
     # :cycle will cycle all file subs. (Default)
     def sub_demux(value = :cycle)
       select_cycle :sub_demux, value
     end
-    
+
     def sub_log
       #TODO
       send("sub_log")
       @stdout.gets
     end
-    
-    # Adjust the subtitle size by +/- <value> 
+
+    # Adjust the subtitle size by +/- <value>
     # :set set it to <value>
     # :relative adjusts it by value
     def sub_scale(value,type = :relative)
@@ -314,26 +316,37 @@ module MPlayer
     def switch_angle(value = :cycle)
       select_cycle :switch_angle, value
     end
-    
+
     # switch_title [value] (DVDNAV only)
     #     Switch to the DVD title with the ID [value]. Cycle through the
     #     available titles if [value] is omitted or negative.
     def switch_title(value = :cycle)
       select_cycle :switch_title, value
-    end 
-    
+    end
+
     # switch_ratio [value]
     #     Change aspect ratio at runtime. [value] is the new aspect ratio expressed
     #     as a float (e.g. 1.77778 for 16/9).
     #     There might be problems with some video filters.
     #
     def switch_ratio(value); send("switch_ratio #{value}"); end
-    
+
     # switch_vsync [value]
     #     Toggle vsync (1 == on, 0 == off). If [value] is not provided,
     #     vsync status is inverted.
     def switch_vsync(value = nil)
       toggle :switch_vsync, value
+    end
+
+    def get(value)
+      send "get_#{value}"
+      data = case value
+      when "time_pos" then "ANS_TIME_POSITION"
+      when "time_length" then "ANS_LENGTH"
+      when "file_name" then "ANS_FILENAME"
+      else "ANS_#{value.upcase}"
+      end
+      puts @stdout.gets.gsub("#{data}=","").gsub("'","")
     end
 
 
@@ -345,7 +358,7 @@ module MPlayer
       switch = (append == :append ? 1 : 0)
       send "loadfile #{file} #{switch}"
     end
-    
+
     # Loads the playlist into MPlayer
     # :append loads the playlist and appends it to the current playlist
     # :no_append will stop playback and play new loaded playlist
@@ -410,7 +423,10 @@ module MPlayer
       send "#{command} #{value} #{switch}"
     end
 
-    def send(cmd); @stdin.puts(cmd); return true; end
+    def send(cmd)
+      @stdin.puts(cmd)
+      return true #change this to return stdout
+    end
 
     def meta(field); "get_meta_#{field}"; end
   end
