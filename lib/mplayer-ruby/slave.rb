@@ -8,7 +8,6 @@ module MPlayer
       @file = file
       mplayer = "/usr/bin/mplayer -slave -quiet #{@file}"
       @pid,@stdin,@stdout,@stderr = Open4.popen4(mplayer)
-      @stdout.sync = true
       until @stdout.gets.inspect =~ /playback/ do; end #fast forward to the desired output
     end
 
@@ -25,20 +24,6 @@ module MPlayer
       else return false
       end
       send cmd
-    end
-
-    # Returns a hash of the meta information of the file.
-    def meta_info
-      #TODO
-      # meta = "get_meta_%s"
-      # album = send meta('album')
-      # artist = send meta('artist')
-      # comment = send meta('comment')
-      # genre = send meta('genre')
-      # title = send meta('title')
-      # track = send meta('track')
-      # year = send meta('year')
-      # {:album => album,:artist => artist, :comment => comment, :genre => genre, :title => title, :track => track, :year => year}
     end
 
     # Seek to some place in the file
@@ -256,7 +241,7 @@ module MPlayer
     #  Display first subtitle from <value>
     #  :sub for SUB_SOURCE_SUBS for file subs
     #  :vobsub for  SUB_SOURCE_VOBSUB for VOBsub files
-    #  : demux SUB_SOURCE_DEMUX for subtitle embedded in the media file or DVD subs.
+    #  :demux SUB_SOURCE_DEMUX for subtitle embedded in the media file or DVD subs.
     #  :off will turn off subtitle display.
     #  :cycle will cycle between the first subtitle of each currently available sources.
     def sub_source(value = :cycle)
@@ -305,48 +290,53 @@ module MPlayer
     end
 
     # switch_audio [value] (currently MPEG*, AVI, Matroska and streams handled by libavformat)
-    #     Switch to the audio track with the ID [value]. Cycle through the
-    #     available tracks if [value] is omitted or negative.
+    # <value> Switch to the audio track with the ID <value>.
+    # :cycle available tracks if [value] is omitted or negative.
     def switch_audio(value = :cycle)
       select_cycle :switch_audio, value
     end
     # switch_angle [value] (DVDs only)
-    #     Switch to the DVD angle with the ID [value]. Cycle through the
-    #     available angles if [value] is omitted or negative.
+    # <value> Switch to the DVD angle with the ID [value].
+    # :cycle available angles if [value] is omitted or negative.
     def switch_angle(value = :cycle)
       select_cycle :switch_angle, value
     end
 
     # switch_title [value] (DVDNAV only)
-    #     Switch to the DVD title with the ID [value]. Cycle through the
-    #     available titles if [value] is omitted or negative.
+    # <value> Switch to the DVD title with the ID [value].
+    # :cycle available titles if [value] is omitted or negative.
     def switch_title(value = :cycle)
       select_cycle :switch_title, value
     end
 
     # switch_ratio [value]
-    #     Change aspect ratio at runtime. [value] is the new aspect ratio expressed
-    #     as a float (e.g. 1.77778 for 16/9).
-    #     There might be problems with some video filters.
-    #
+    # <value> Change aspect ratio at runtime. [value] is the new aspect ratio expressed
+    # as a float (e.g. 1.77778 for 16/9).
+    # There might be problems with some video filters.
     def switch_ratio(value); send("switch_ratio #{value}"); end
 
     # switch_vsync [value]
-    #     Toggle vsync (1 == on, 0 == off). If [value] is not provided,
-    #     vsync status is inverted.
+    # :on Toggle vsync on
+    # :off Toggle off
+    # nil for just Toggle
     def switch_vsync(value = nil)
       toggle :switch_vsync, value
     end
 
+    # returns information on file
+    # available values are:
+    # time_pos time_length file_name video_codec video_bitrate video_resolution
+    # audio_codec audio_bitrate audio_samples meta_title meta_artist meta_album
+    # meta_year meta_comment meta_track meta_genre
     def get(value)
-      send "get_#{value}"
+      resp = send "get_#{value}"
       data = case value
       when "time_pos" then "ANS_TIME_POSITION"
       when "time_length" then "ANS_LENGTH"
       when "file_name" then "ANS_FILENAME"
-      else "ANS_#{value.upcase}"
+      else "ANS_#{value.to_s.upcase}"
       end
-      puts @stdout.gets.gsub("#{data}=","").gsub("'","")
+      resp.gsub("#{data}=","").gsub("'","")
     end
 
 
@@ -425,7 +415,7 @@ module MPlayer
 
     def send(cmd)
       @stdin.puts(cmd)
-      return true #change this to return stdout
+      @stdout.gets
     end
 
     def meta(field); "get_meta_#{field}"; end

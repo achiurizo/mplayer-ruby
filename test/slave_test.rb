@@ -3,6 +3,7 @@ require File.expand_path("teststrap", File.dirname(__FILE__))
 context "MPlayer::Player" do
   setup do
     mock(Open4).popen4("/usr/bin/mplayer -slave -quiet test/test.mp3") { [true,true,true,true] }
+    stub(true).gets { "playback" }
     @player = MPlayer::Slave.new('test/test.mp3')
   end
   asserts("invalid file") { MPlayer::Slave.new('boooger') }.raises ArgumentError,"Invalid File"
@@ -44,15 +45,6 @@ context "MPlayer::Player" do
       asserts("returns false").equals false
     end
   end
-
-  # context "get meta_info" do
-  #   setup do
-  #     metas = %w[get_meta_album get_meta_artist get_meta_comment get_meta_genre get_meta_title get_meta_track get_meta_year]
-  #     metas.each { |meta| mock_stdin @player,meta }
-  #     @player.meta_info
-  #   end
-  #   asserts("returns hash").equals({:album=>true,:artist=>true,:comment=>true,:genre=>true,:title=>true,:track=>true,:year=>true})
-  # end
 
   context "seek" do
 
@@ -517,7 +509,7 @@ context "MPlayer::Player" do
 
   context "get" do
 
-    %w[time_position timelength filename video_codec video_bitrate video_resolution
+    %w[time_pos time_length file_name video_codec video_bitrate video_resolution
       audio_codec audio_bitrate audio_samples meta_title meta_artist meta_album
     meta_year meta_comment meta_track meta_genre].each do |info|
       context info do
