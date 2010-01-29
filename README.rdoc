@@ -1,6 +1,23 @@
 = mplayer-ruby
 
-A Ruby Wrapper for MPlayer.
+A Ruby Wrapper for MPlayer. Controls MPlayer via the Slave Protocol.
+
+
+== Installation
+
+=== Linux
+
+    $ sudo apt-get install mplayer
+    
+=== Mac OS X
+
+ download (Mac OS X Extended)[http://www.mplayerhq.hu/homepage/design7/news.html].
+
+ then create a symbolic link for mplayer.
+ 
+    $ sudo ln -s "/Applications/MPlayer OSX Extended.app/Contents/Resources/External_Binaries/mplayer.app/Contents/MacOS/mplayer" /usr/bin/mplayer
+
+
 
 
 == TODO

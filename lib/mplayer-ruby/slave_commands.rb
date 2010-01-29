@@ -12,7 +12,7 @@ module MPlayer
       when :set then "volume #{value} 1"
       else return false
       end
-      send cmd
+      send cmd, /Volume/
     end
 
     # Seek to some place in the file
@@ -58,6 +58,13 @@ module MPlayer
       send(force == :force ? "pt_step #{value} 1" : "pt_step #{value} 0")
     end
 
+    #convenience methods
+    alias :next :pt_step
+    def back(value,force = :no_force)
+      v = "-" + value.to_s.gsub("-","")
+      pt_step v, force
+    end
+
     # Similar to pt_step but jumps to the next/previous entry in the parent list.
     # Useful to break out of the inner loop in the playtree.
     def pt_up_step(value,force = :no_force)
@@ -72,21 +79,21 @@ module MPlayer
     def mute(value = nil)
       toggle :mute, value
     end
-    
+
     # returns information on file
     # available values are:
     # time_pos time_length file_name video_codec video_bitrate video_resolution
     # audio_codec audio_bitrate audio_samples meta_title meta_artist meta_album
     # meta_year meta_comment meta_track meta_genre
     def get(value)
-      resp = send "get_#{value}"
-      data = case value
+      match = case value
       when "time_pos" then "ANS_TIME_POSITION"
       when "time_length" then "ANS_LENGTH"
       when "file_name" then "ANS_FILENAME"
       else "ANS_#{value.to_s.upcase}"
       end
-      resp.gsub("#{data}=","").gsub("'","")
+      resp = send "get_#{value}",/#{match}/
+      resp.gsub("#{match}=","").gsub("'","")
     end
 
     # This gives methods for each of the fields that data can be extract on.
@@ -96,7 +103,15 @@ module MPlayer
     meta_year meta_comment meta_track meta_genre].each do |field|
       define_method(field.to_sym) { get(field) }
     end
-    
+    alias :time_position :time_pos
+    alias :filename :file_name
+    alias :title :meta_title
+    alias :album :meta_album
+    alias :year :meta_year
+    alias :comment :meta_comment
+    alias :genre :meta_genre
+
+
     # Loads the file into MPlayer
     # :append loads the file and appends it to the current playlist
     # :no_append will stop playback and play new loaded file
@@ -114,7 +129,7 @@ module MPlayer
       switch = (append == :append ? 1 : 0)
       send "loadlist #{file} #{switch}"
     end
-    
+
     # When more than one source is available it selects the next/previous one.
     # ASX Playlist ONLY
     def alt_src_step(value); send("alt_src_step #{value}"); end
@@ -138,7 +153,10 @@ module MPlayer
     def pause; send("pause") ; end
 
     # Quits MPlayer
-    def quit; send('quit') ; end
+    def quit
+      send('quit')
+      @stdin.close
+    end
 
 
   end

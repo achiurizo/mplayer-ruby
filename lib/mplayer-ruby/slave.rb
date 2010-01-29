@@ -5,16 +5,17 @@ module MPlayer
     include MPlayer::SlaveCommands
     include MPlayer::SlaveVideoCommands
 
-    def initialize(file = "")
+    def initialize(file = "",options ={:path => '/usr/bin/mplayer'})
       raise ArgumentError,"Invalid File" unless File.exists?(file)
       @file = file
-      mplayer = "/usr/bin/mplayer -slave -quiet #{@file}"
+      mplayer = "#{options[:path]} -slave -quiet #{@file}"
       @pid,@stdin,@stdout,@stderr = Open4.popen4(mplayer)
       until @stdout.gets.inspect =~ /playback/ do
       end #fast forward to the desired output
     end
 
 
+#Where I'm keeping my todo list.
     def balance(value,type = :relative)
       #TODO
       return false
@@ -60,9 +61,13 @@ module MPlayer
       send "#{command} #{value} #{switch}"
     end
 
-    def send(cmd)
+    def send(cmd,match = //)
       @stdin.puts(cmd)
-      @stdout.gets
+      response = @stdout.gets
+      until response =~ match
+        response = @stdout.gets
+      end
+      response.inspect
     end
 
   end
