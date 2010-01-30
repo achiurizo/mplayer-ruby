@@ -87,7 +87,7 @@ module MPlayer
     # audio_codec audio_bitrate audio_samples meta_title meta_artist meta_album
     # meta_year meta_comment meta_track meta_genre
     def get(value)
-      match = case value
+      match = case value.to_s
       when "time_pos" then "ANS_TIME_POSITION"
       when "time_length" then "ANS_LENGTH"
       when "file_name" then "ANS_FILENAME"
