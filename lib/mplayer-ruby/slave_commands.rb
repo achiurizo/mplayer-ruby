@@ -12,7 +12,8 @@ module MPlayer
       when :set then "volume #{value} 1"
       else return false
       end
-      send cmd, /Volume/
+      resp = send cmd, /Volume/
+      resp.gsub("\e[A\r\e[KVolume: ","").gsub(" %\n","")
     end
 
     # Seek to some place in the file

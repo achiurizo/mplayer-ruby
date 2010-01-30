@@ -67,7 +67,7 @@ module MPlayer
       until response =~ match
         response = @stdout.gets
       end
-      response.inspect
+      response
     end
 
   end
