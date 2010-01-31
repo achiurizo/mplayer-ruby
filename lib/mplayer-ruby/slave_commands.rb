@@ -13,7 +13,7 @@ module MPlayer
       else return false
       end
       resp = send cmd, /Volume/
-      resp.gsub("\e[A\r\e[KVolume: ","").gsub(" %\n","")
+      resp.gsub("Volume: ","").gsub(" %\n","")
     end
 
     # Seek to some place in the file
@@ -21,11 +21,13 @@ module MPlayer
     # :perecent is a seek to <value> % in the file.
     # :absolute is a seek to an absolute position of <value> seconds.
     def seek(value,type = :relative)
-      send case type
+      command = case type
       when :percent then "seek #{value} 1"
       when :absolute then "seek #{value} 2"
       else "seek #{value} 0"
       end
+      resp = send command, /Position/
+      resp.gsub("Position: ","").gsub(" %\n","")
     end
 
     # Adjusts the current playback speed
@@ -78,7 +80,8 @@ module MPlayer
     # Toggle sound output muting or set it to [value] when [value] >= 0
     #     (1 == on, 0 == off).
     def mute(value = nil)
-      toggle :mute, value
+      resp = toggle :mute, value, /Mute/
+      resp.gsub("Mute: ","")
     end
 
     # returns information on file
@@ -136,13 +139,20 @@ module MPlayer
     def alt_src_step(value); send("alt_src_step #{value}"); end
 
     # Add <value> to the current playback speed.
-    def speed_incr(value); send("speed_incr #{value}"); end
+    def speed_incr(value)
+      send("speed_incr #{value}",/Speed/).gsub("Speed: x   ","")
+    end
 
     # Multiply the current speed by <value>.
-    def speed_mult(value); send("speed_mult #{value}"); end
+    def speed_mult(value)
+      send("speed_mult #{value}",/Speed/).gsub("Speed: x   ","")
+    end
 
     # Set the speed to <value>.
-    def speed_set(value); send("speed_set #{value}"); end
+    # cannot be greater than 5
+    def speed_set(value)
+      send("speed_set #{value}",/Speed/).gsub("Speed: x    ","")
+    end
 
     # Play one frame, then pause again.
     def frame_step; send("frame_step"); end

@@ -15,7 +15,7 @@ module MPlayer
     end
 
 
-#Where I'm keeping my todo list.
+    #Where I'm keeping my todo list.
     def balance(value,type = :relative)
       #TODO
       return false
@@ -28,38 +28,9 @@ module MPlayer
 
     def sub_log
       #TODO
-      return false      
-    end
-    
-    
-    private
-
-    def select_cycle(command,value)
-      switch = case value
-      when :off then -1
-      when :cycle then -2
-      else value
-      end
-      send "#{command} #{switch}"
+      return false
     end
 
-    def toggle(command,value)
-      send case value
-      when :on then "#{command} 1"
-      when :off then "#{command} 0"
-      else "#{command}"
-      end
-    end
-
-    def setting(command,value,type)
-      raise(ArgumentError,"Value out of Range -100..100") unless (-100..100).include?(value)
-      adjust_set command, value, type
-    end
-
-    def adjust_set(command,value,type = :relative)
-      switch = ( type == :relative ? 0 : 1 )
-      send "#{command} #{value} #{switch}"
-    end
 
     def send(cmd,match = //)
       @stdin.puts(cmd)
@@ -67,7 +38,37 @@ module MPlayer
       until response =~ match
         response = @stdout.gets
       end
-      response
+      response.gsub("\e[A\r\e[K","")
+    end
+
+    private
+
+    def select_cycle(command,value,match = //)
+      switch = case value
+      when :off then -1
+      when :cycle then -2
+      else value
+      end
+      send "#{command} #{switch}",match
+    end
+
+    def toggle(command,value,match = //)
+      cmd = case value
+      when :on then "#{command} 1"
+      when :off then "#{command} 0"
+      else "#{command}"
+      end
+      send cmd,match
+    end
+
+    def setting(command,value,type, match = //)
+      raise(ArgumentError,"Value out of Range -100..100") unless (-100..100).include?(value)
+      adjust_set command, value, type
+    end
+
+    def adjust_set(command,value,type = :relative, match = //)
+      switch = ( type == :relative ? 0 : 1 )
+      send "#{command} #{value} #{switch}",match
     end
 
   end
