@@ -140,18 +140,18 @@ module MPlayer
 
     # Add <value> to the current playback speed.
     def speed_incr(value)
-      send("speed_incr #{value}",/Speed/).gsub("Speed: x   ","")
+      speed_setting :speed_incr, value
     end
 
     # Multiply the current speed by <value>.
     def speed_mult(value)
-      send("speed_mult #{value}",/Speed/).gsub("Speed: x   ","")
+      speed_setting :speed_mult, value
     end
 
     # Set the speed to <value>.
     # cannot be greater than 5
     def speed_set(value)
-      send("speed_set #{value}",/Speed/).gsub("Speed: x    ","")
+      speed_setting :speed_set, value
     end
 
     # Play one frame, then pause again.
@@ -169,6 +169,12 @@ module MPlayer
       @stdin.close
     end
 
+    private
+    
+    def speed_setting(command,value)
+      raise ArgumentError,"Value must be less than 6" unless value <= 5
+      send("#{command} #{value}",/Speed/).gsub("Speed: x   ","")
+    end
 
   end
 end

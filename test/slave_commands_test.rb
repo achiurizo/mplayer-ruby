@@ -6,7 +6,7 @@ context "MPlayer::Player" do
     stub(true).gets { "playback" }
     @player = MPlayer::Slave.new('test/test.mp3')
   end
-  
+
   context "pause" do
     setup { mock_send @player, "pause" }
     asserts("returns true") { @player.pause }
@@ -66,7 +66,7 @@ context "MPlayer::Player" do
     setup { mock_send @player, "edl_mark"}
     asserts("returns true") { @player.edl_mark }
   end
-  
+
   context "speed_incr" do
     setup { mock_send @player, "speed_incr 5","Speed: x   10",/Speed/ }
     asserts("speed_incr 5") { @player.speed_incr 5 }.equals "10"
@@ -78,8 +78,14 @@ context "MPlayer::Player" do
   end
 
   context "speed_set" do
-    setup { mock_send @player, "speed_set 5","Speed: x    10",/Speed/ }
+    setup { mock_send @player, "speed_set 5","Speed: x   10",/Speed/ }
     asserts("speed_set 5") { @player.speed_set 5 }.equals "10"
+  end
+
+  context "speed_set speed_mult speed_incr raise error" do
+    asserts("speed_incr 6") {  @player.speed_incr 6 }.raises ArgumentError,"Value must be less than 6"
+    asserts("speed_mult 6") {  @player.speed_mult 6 }.raises ArgumentError,"Value must be less than 6"
+    asserts("speed_set 6") {  @player.speed_set 6 }.raises ArgumentError,"Value must be less than 6"
   end
 
   context "speed" do
@@ -157,7 +163,7 @@ context "MPlayer::Player" do
       asserts("loop :set, 5") { @player.loop :set, 5 }
     end
   end
-  
+
   context "use_master" do
     setup { mock_send @player, "use_master" }
     asserts("returns true") { @player.use_master }
@@ -180,7 +186,7 @@ context "MPlayer::Player" do
       asserts("mute :off") { @player.mute :off }.equals "enabled"
     end
   end
-  
+
   context "get" do
 
     %w[time_pos time_length file_name video_codec video_bitrate video_resolution
@@ -228,6 +234,6 @@ context "MPlayer::Player" do
       asserts("load_list test/test.mp3, :no_append") { @player.load_list 'test/test.mp3', :no_append }
     end
   end
-  
-  
+
+
 end
