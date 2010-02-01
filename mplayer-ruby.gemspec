@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
      "lib/mplayer-ruby/slave.rb",
      "lib/mplayer-ruby/slave_commands.rb",
      "lib/mplayer-ruby/slave_video_commands.rb",
+     "mplayer-ruby.gemspec",
      "test.watchr",
      "test/mplayer-ruby_test.rb",
      "test/slave_commands_test.rb",
