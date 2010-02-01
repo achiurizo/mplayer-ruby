@@ -119,6 +119,7 @@ module MPlayer
     alias :title :meta_title
     alias :album :meta_album
     alias :year :meta_year
+    alias :artist :meta_artist
     alias :comment :meta_comment
     alias :genre :meta_genre
 
