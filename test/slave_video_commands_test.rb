@@ -10,7 +10,7 @@ context "MPlayer::Player" do
   context "audio_delay" do
 
     context "by relative" do
-      setup { 2.times { mock_stdin @player, "audio_delay 5 0" } }
+      setup { mock_stdin @player, "audio_delay 5 0" }
       asserts("audio_delay 5") { @player.audio_delay 5 }
       asserts("audio_delay 5,:relative") {  @player.audio_delay 5,:relative }
     end
@@ -24,7 +24,7 @@ context "MPlayer::Player" do
   context "sub_delay" do
 
     context "absolute" do
-      setup { 2.times { mock_stdin @player, "sub_delay 5 1" } }
+      setup { mock_stdin @player, "sub_delay 5 1" }
       asserts("sub_delay 5") {  @player.sub_delay 5 }
       asserts("sub_delay 5, :relative") { @player.sub_delay 5,:absolute }
     end
@@ -38,13 +38,13 @@ context "MPlayer::Player" do
   context "sub_step" do
 
     context "forward" do
-      setup { 2.times { mock_stdin @player, "sub_step 5" } }
+      setup { mock_stdin @player, "sub_step 5" }
       asserts("sub_step 5") { @player.sub_step 5 }
       asserts("sub_step 5,:forward") { @player.sub_step 5, :forward }
     end
 
     context "backward" do
-      setup { 2.times { mock_stdin @player, "sub_step -5" } }
+      setup { mock_stdin @player, "sub_step -5" }
       asserts("sub_step -5") { @player.sub_step -5 }
       asserts("sub_step 5,:backward") { @player.sub_step 5,:backward }
     end
@@ -103,7 +103,7 @@ context "MPlayer::Player" do
     context setting do
 
       context "relative" do
-        setup { 2.times { mock_stdin @player, "#{setting} 5 0"} }
+        setup { mock_stdin @player, "#{setting} 5 0" }
         asserts("#{setting} 5, :relative") { @player.method(setting).call(5, :relative) }
         asserts("#{setting} 5") { @player.method(setting).call(5) }
       end
@@ -137,7 +137,7 @@ context "MPlayer::Player" do
 
   context "sub_pos" do
     context "by relative" do
-      setup { 2.times { mock_stdin @player, "sub_pos 5 0" } }
+      setup { mock_stdin @player, "sub_pos 5 0"  }
       asserts("sub_pos 5") { @player.sub_pos 5 }
       asserts("sub_pos 5,:relative") {  @player.sub_pos 5,:relative }
     end
@@ -201,7 +201,7 @@ context "MPlayer::Player" do
   context "sub_remove" do
 
     context "all" do
-      setup { 2.times { mock_stdin @player, "sub_remove -1" } }
+      setup { mock_stdin @player, "sub_remove -1" }
       asserts("sub_remove") { @player.sub_remove }
       asserts("sub_remove :all") { @player.sub_remove :all }
     end
@@ -220,7 +220,7 @@ context "MPlayer::Player" do
     end
 
     context "cycle" do
-      setup { 2.times { mock_stdin @player, "sub_select -2" } }
+      setup { mock_stdin @player, "sub_select -2" }
       asserts("sub_select") { @player.sub_select }
       asserts("sub_select :cycle") { @player.sub_select :cycle }
     end
@@ -249,7 +249,7 @@ context "MPlayer::Player" do
     end
 
     context "cycle" do
-      setup { 2.times { mock_stdin @player, "sub_source -2" } }
+      setup { mock_stdin @player, "sub_source -2" }
       asserts("sub_source :cycle") { @player.sub_source :cycle }
       asserts("sub_source") { @player.sub_source }
     end
@@ -270,7 +270,7 @@ context "MPlayer::Player" do
       end
 
       context "cycle" do
-        setup { 2.times { mock_stdin @player, "#{sub} -2" } }
+        setup { mock_stdin @player, "#{sub} -2" }
         asserts("#{sub} :cycle") { @player.method(sub).call :cycle }
         asserts("#{sub}") { @player.method(sub).call }
       end
@@ -279,7 +279,7 @@ context "MPlayer::Player" do
 
   context "sub_scale" do
     context "by relative" do
-      setup { 2.times { mock_stdin @player, "sub_scale 5 0" } }
+      setup { mock_stdin @player, "sub_scale 5 0" }
       asserts("sub_scale 5") { @player.sub_scale 5 }
       asserts("sub_scale 5,:relative") {  @player.sub_scale 5,:relative }
     end
@@ -300,7 +300,7 @@ context "MPlayer::Player" do
       end
 
       context "cycle" do
-        setup { 2.times { mock_stdin @player, "#{switch} -2" } }
+        setup { mock_stdin @player, "#{switch} -2" }
         asserts("#{switch}") { @player.method(switch).call }
         asserts("#{switch} :cycle") { @player.method(switch).call :cycle }
       end
