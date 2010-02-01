@@ -54,15 +54,22 @@ module MPlayer
       end
     end
 
-    # Go to the next/previous entry in the playtree. The sign of <value> tells
-    # the direction.  If no entry is available in the given direction it will do
-    # nothing unless [force] is non-zero.
+    # Go to the next/previous entry in the playtree. 
+    #T he sign of <value> tells the direction.  
+    # If no entry is available in the given direction it will do
+    # nothing unless :force
     def pt_step(value,force = :no_force)
       send(force == :force ? "pt_step #{value} 1" : "pt_step #{value} 0")
     end
 
-    #convenience methods
-    alias :next :pt_step
+    # goes to the next entry in the playlist denoted by value.
+    # No action will occur unless :force is specified
+    def next(value,force = :no_force)
+      pt_step value.abs, force
+    end
+    
+    # goes to the previous entry in the playlist denoted by value.
+    # No action will occur unless :force is specified
     def back(value,force = :no_force)
       v = "-" + value.to_s.gsub("-","")
       pt_step v, force

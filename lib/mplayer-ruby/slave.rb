@@ -5,6 +5,10 @@ module MPlayer
     include MPlayer::SlaveCommands
     include MPlayer::SlaveVideoCommands
 
+
+    # Initializes a new instance of MPlayer.
+    # set :path to point to the location of mplayer
+    # defaults to '/usr/bin/mplayer'
     def initialize(file = "",options ={:path => '/usr/bin/mplayer'})
       raise ArgumentError,"Invalid File" unless File.exists?(file)
       @file = file
@@ -14,6 +18,8 @@ module MPlayer
       end #fast forward to the desired output
     end
 
+    # sends command to mplayer stdin and retrieves stdout.
+    # If match is provided, fast-forwards stdout to matching response.
     def send(cmd,match = //)
       @stdin.puts(cmd)
       response = @stdout.gets
