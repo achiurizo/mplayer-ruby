@@ -14,24 +14,6 @@ module MPlayer
       end #fast forward to the desired output
     end
 
-
-    #Where I'm keeping my todo list.
-    def balance(value,type = :relative)
-      #TODO
-      return false
-    end
-
-    def vobsub_lang(value = nil)
-      # TODO
-      return false
-    end
-
-    def sub_log
-      #TODO
-      return false
-    end
-
-
     def send(cmd,match = //)
       @stdin.puts(cmd)
       response = @stdout.gets
