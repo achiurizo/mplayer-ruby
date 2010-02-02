@@ -2,8 +2,9 @@
 
 A Ruby Wrapper for MPlayer. Controls MPlayer via the Slave Protocol.
 
+See (RDOC)[http://mplayer-ruby.rubyforge.org/mplayer-ruby/index.html] for additional information.
 
-See examples/ for usage.
+See examples/[http://github.com/achiu/mplayer-ruby/tree/master/examples/] for usage.
 
 
 == Installation
@@ -41,7 +42,6 @@ It's hosted on gemcutter.org
 * Complete Slave Protocol 
 * Complete Other Functionalities 
 * Create a Better README
-* RDoc?
 * Example Usages
 
 == Note on Patches/Pull Requests
