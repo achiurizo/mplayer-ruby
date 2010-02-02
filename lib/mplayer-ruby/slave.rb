@@ -22,7 +22,7 @@ module MPlayer
     # If match is provided, fast-forwards stdout to matching response.
     def send(cmd,match = //)
       @stdin.puts(cmd)
-      response = @stdout.gets
+      response = ""
       until response =~ match
         response = @stdout.gets
       end
@@ -51,7 +51,7 @@ module MPlayer
 
     def setting(command,value,type, match = //)
       raise(ArgumentError,"Value out of Range -100..100") unless (-100..100).include?(value)
-      adjust_set command, value, type
+      adjust_set command, value, type, match
     end
 
     def adjust_set(command,value,type = :relative, match = //)

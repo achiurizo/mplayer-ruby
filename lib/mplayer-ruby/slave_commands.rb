@@ -71,8 +71,8 @@ module MPlayer
     # goes to the previous entry in the playlist denoted by value.
     # No action will occur unless :force is specified
     def back(value,force = :no_force)
-      v = "-" + value.to_s.gsub("-","")
-      pt_step v, force
+      val = "-" + value.to_s.gsub("-","")
+      pt_step val, force
     end
 
     # Similar to pt_step but jumps to the next/previous entry in the parent list.
@@ -97,14 +97,14 @@ module MPlayer
     # audio_codec audio_bitrate audio_samples meta_title meta_artist meta_album
     # meta_year meta_comment meta_track meta_genre
     def get(value)
-      match = case value.to_s
+      field = value.to_s
+      match = case field
       when "time_pos" then "ANS_TIME_POSITION"
       when "time_length" then "ANS_LENGTH"
       when "file_name" then "ANS_FILENAME"
-      else "ANS_#{value.to_s.upcase}"
+      else "ANS_#{field.upcase}"
       end
-      resp = send "get_#{value}",/#{match}/
-      resp.gsub("#{match}=","").gsub("'","")
+      send("get_#{value}",/#{match}/).gsub("#{match}=","").gsub("'","")
     end
 
     # This gives methods for each of the fields that data can be extract on.

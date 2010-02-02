@@ -19,8 +19,9 @@ module MPlayer
     # step backwards if <value> is negative
     # can also set type to :backward or :forward and return postive <value>
     def sub_step(value, type = :forward)
+      val = value.abs
       type = :backward if value < 0
-      send(type == :forward ? "sub_step #{value.abs}" : "sub_step -#{value.abs}" )
+      send(type == :forward ? "sub_step #{val}" : "sub_step -#{val}" )
     end
     
     # Toggle OSD mode
@@ -156,7 +157,7 @@ module MPlayer
       when :vobsub then 1
       when :demux then 2
       when :off then -1
-      when :cycle then -2
+      else -2
       end
       send "sub_source #{switch}"
     end
