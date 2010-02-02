@@ -21,7 +21,7 @@ module MPlayer
     def sub_step(value, type = :forward)
       val = value.abs
       type = :backward if value < 0
-      send(type == :forward ? "sub_step #{val}" : "sub_step -#{val}" )
+      send(type == :forward ? "sub_step #{val}" : "sub_step #{-val}" )
     end
     
     # Toggle OSD mode

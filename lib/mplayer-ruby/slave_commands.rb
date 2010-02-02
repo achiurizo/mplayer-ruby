@@ -71,8 +71,7 @@ module MPlayer
     # goes to the previous entry in the playlist denoted by value.
     # No action will occur unless :force is specified
     def back(value,force = :no_force)
-      val = "-" + value.to_s.gsub("-","")
-      pt_step val, force
+      pt_step -value.abs, force
     end
 
     # Similar to pt_step but jumps to the next/previous entry in the parent list.
