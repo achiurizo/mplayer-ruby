@@ -330,4 +330,21 @@ context "MPlayer::SlaveVideoCommands" do
     end
   end
   
+  context "forced_subs_only" do
+    context "toggle" do
+      setup { mock_stdin @player, "forced_subs_only" }
+      asserts("forced_subs_only") { @player.forced_subs_only }
+    end
+
+    context "on" do
+      setup { mock_stdin @player, "forced_subs_only 1" }
+      asserts("forced_subs_only :on") { @player.forced_subs_only :on }
+    end
+
+    context "off" do
+      setup { mock_stdin @player, "forced_subs_only 0" }
+      asserts("forced_subs_only :off") { @player.forced_subs_only :off }
+    end
+  end
+  
 end

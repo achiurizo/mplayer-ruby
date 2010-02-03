@@ -224,6 +224,10 @@ module MPlayer
       toggle :switch_vsync, value
     end
     
+    # Toggle/set  forced subtitles only
+    def forced_subs_only(value = nil)
+      toggle :forced_subs_only, value
+    end
     
   end
 end
