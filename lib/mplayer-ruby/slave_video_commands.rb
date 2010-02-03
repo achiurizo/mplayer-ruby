@@ -18,10 +18,10 @@ module MPlayer
     # Step forward in the subtitle list by <value> steps
     # step backwards if <value> is negative
     # can also set type to :backward or :forward and return postive <value>
-    def sub_step(value, type = :forward)
+    def sub_step(value, type = :next)
       val = value.abs
-      type = :backward if value < 0
-      send(type == :forward ? "sub_step #{val}" : "sub_step #{-val}" )
+      type = :prev if value < 0
+      send(type == :next ? "sub_step #{val}" : "sub_step #{-val}" )
     end
     
     # Toggle OSD mode

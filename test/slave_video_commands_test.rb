@@ -1,6 +1,6 @@
 require File.expand_path("teststrap", File.dirname(__FILE__))
 
-context "MPlayer::Player" do
+context "MPlayer::SlaveVideoCommands" do
   setup do
     mock(Open4).popen4("/usr/bin/mplayer -slave -quiet test/test.mp3") { [true,true,true,true] }
     stub(true).gets { "playback" }
@@ -37,16 +37,16 @@ context "MPlayer::Player" do
 
   context "sub_step" do
 
-    context "forward" do
+    context "next" do
       setup { mock_stdin @player, "sub_step 5" }
       asserts("sub_step 5") { @player.sub_step 5 }
-      asserts("sub_step 5,:forward") { @player.sub_step 5, :forward }
+      asserts("sub_step 5,:next") { @player.sub_step 5, :next }
     end
 
-    context "backward" do
+    context "prev" do
       setup { mock_stdin @player, "sub_step -5" }
       asserts("sub_step -5") { @player.sub_step -5 }
-      asserts("sub_step 5,:backward") { @player.sub_step 5,:backward }
+      asserts("sub_step 5,:backward") { @player.sub_step 5,:prev }
     end
   end
 

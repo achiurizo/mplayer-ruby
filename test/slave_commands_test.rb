@@ -1,6 +1,6 @@
 require File.expand_path("teststrap", File.dirname(__FILE__))
 
-context "MPlayer::Player" do
+context "MPlayer::SlaveCommands" do
   setup do
     mock(Open4).popen4("/usr/bin/mplayer -slave -quiet test/test.mp3") { [true,true,true,true] }
     stub(true).gets { "playback" }

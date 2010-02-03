@@ -4,6 +4,7 @@ module MPlayer
     attr_reader :pid,:stdout,:stderr,:file
     include MPlayer::SlaveCommands
     include MPlayer::SlaveVideoCommands
+    include MPlayer::SlaveTvCommands
 
 
     # Initializes a new instance of MPlayer.
