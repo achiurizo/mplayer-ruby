@@ -8,7 +8,7 @@ puts $player.volume :down
 sleep 5
 puts $player.volume :set, 60
 sleep 5
-load file and play immediately
+# load file and play immediately
 puts $player.load_file "/Volumes/Storage/Music/primero.ogg", :no_append
 
 sleep 10
