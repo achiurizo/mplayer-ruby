@@ -5,6 +5,7 @@ module MPlayer
     include MPlayer::SlaveCommands
     include MPlayer::SlaveVideoCommands
     include MPlayer::SlaveTvCommands
+    include MPlayer::SlaveSubCommands
 
 
     # Initializes a new instance of MPlayer.
@@ -16,7 +17,7 @@ module MPlayer
       mplayer = "#{options[:path]} -slave -quiet #{@file}"
       @pid,@stdin,@stdout,@stderr = Open4.popen4(mplayer)
       until @stdout.gets.inspect =~ /playback/ do
-      end #fast forward to the desired output
+      end #fast forward past mplayer's initial output
     end
 
     # sends command to mplayer stdin and retrieves stdout.
