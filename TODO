@@ -3,7 +3,6 @@ Slave Commands:
 
 balance              Float
 file_filter          Integer
-screenshot           [Integer]
 panscan              Float [Integer]
 run                  String
 change_rectangle     Integer Integer

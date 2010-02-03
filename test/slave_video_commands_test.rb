@@ -214,4 +214,16 @@ context "MPlayer::SlaveVideoCommands" do
     end
   end
   
+  context "screenshot" do
+    context "take screenshot" do
+      setup { mock_stdin @player, "screenshot 0" }
+      asserts("screenshot") { @player.screenshot }
+    end
+    
+    context "start/stop screenshot" do
+      setup { mock_stdin @player, "screenshot 1" }
+      asserts("screenshot :toggle") { @player.screenshot :toggle }
+    end
+  end
+  
 end

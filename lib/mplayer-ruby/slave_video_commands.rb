@@ -152,6 +152,14 @@ module MPlayer
     def vo_rootwin(value = nil)
       toggle :vo_rootwin, value
     end
+    
+    # Take a screenshot. Requires the screenshot filter to be loaded.
+    # nil Take a single screenshot.
+    # :toggle Start/stop taking screenshot of each frame.
+    def screenshot(toggle=nil)
+      switch = toggle == :toggle ? 1 : 0
+      send "screenshot #{switch}"
+    end    
         
   end
 end
