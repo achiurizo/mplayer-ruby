@@ -112,6 +112,46 @@ module MPlayer
     def switch_vsync(value = nil)
       toggle :switch_vsync, value
     end
+     
+    # Toggle/set borderless display
+    # :on Toggle on
+    # :off Toggle off
+    #  nil for Toggle
+    def vo_border(value = nil)
+      toggle :vo_border, value
+    end
+    
+    # Toggle/set borderless display
+    # :on Toggle on
+    # :off Toggle off
+    #  nil for Toggle
+    def vo_border(value = nil)
+      toggle :vo_border, value
+    end
+    
+    # Toggle/set fullscreen mode
+    # :on Toggle on
+    # :off Toggle off
+    #  nil for Toggle
+    def vo_fullscreen(value = nil)
+      toggle :vo_fullscreen, value
+    end
+    
+    # Toggle/set stay-on-top
+    # :on Toggle on
+    # :off Toggle off
+    #  nil for Toggle
+    def vo_ontop(value = nil)
+      toggle :vo_ontop, value
+    end
+    
+    # Toggle/set playback on root window
+    # :on Toggle on
+    # :off Toggle off
+    #  nil for Toggle
+    def vo_rootwin(value = nil)
+      toggle :vo_rootwin, value
+    end
         
   end
 end

@@ -146,4 +146,72 @@ context "MPlayer::SlaveVideoCommands" do
     end
   end
   
+  context "vo_border" do
+    context "toggle" do
+      setup { mock_stdin @player, "vo_border" }
+      asserts("vo_border") { @player.vo_border }
+    end
+
+    context "on" do
+      setup { mock_stdin @player, "vo_border 1" }
+      asserts("vo_border :on") { @player.vo_border :on }
+    end
+
+    context "off" do
+      setup { mock_stdin @player, "vo_border 0" }
+      asserts("vo_border :off") { @player.vo_border :off }
+    end
+  end
+  
+  context "vo_fullscreen" do
+    context "toggle" do
+      setup { mock_stdin @player, "vo_fullscreen" }
+      asserts("vo_fullscreen") { @player.vo_fullscreen }
+    end
+
+    context "on" do
+      setup { mock_stdin @player, "vo_fullscreen 1" }
+      asserts("vo_fullscreen :on") { @player.vo_fullscreen :on }
+    end
+
+    context "off" do
+      setup { mock_stdin @player, "vo_fullscreen 0" }
+      asserts("vo_fullscreen :off") { @player.vo_fullscreen :off }
+    end
+  end
+  
+  context "vo_ontop" do
+    context "toggle" do
+      setup { mock_stdin @player, "vo_ontop" }
+      asserts("vo_ontop") { @player.vo_ontop }
+    end
+
+    context "on" do
+      setup { mock_stdin @player, "vo_ontop 1" }
+      asserts("vo_ontop :on") { @player.vo_ontop :on }
+    end
+
+    context "off" do
+      setup { mock_stdin @player, "vo_ontop 0" }
+      asserts("vo_ontop :off") { @player.vo_ontop :off }
+    end
+  end
+
+  context "vo_rootwin" do
+    context "toggle" do
+      setup { mock_stdin @player, "vo_rootwin" }
+      asserts("vo_rootwin") { @player.vo_rootwin }
+    end
+
+    context "on" do
+      setup { mock_stdin @player, "vo_rootwin 1" }
+      asserts("vo_rootwin :on") { @player.vo_rootwin :on }
+    end
+
+    context "off" do
+      setup { mock_stdin @player, "vo_rootwin 0" }
+      asserts("vo_rootwin :off") { @player.vo_rootwin :off }
+    end
+  end
+  
 end

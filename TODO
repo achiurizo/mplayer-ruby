@@ -2,17 +2,9 @@
 Slave Commands:
 
 balance              Float
-switch_ratio         [Float]
-vo_fullscreen        [Integer]
-vo_ontop             [Integer]
 file_filter          Integer
-vo_rootwin           [Integer]
-vo_border            [Integer]
 screenshot           [Integer]
 panscan              Float [Integer]
-switch_vsync         [Integer]
-loadfile             String [Integer]
-loadlist             String [Integer]
 run                  String
 change_rectangle     Integer Integer
 dvdnav               String
