@@ -3,10 +3,10 @@ Slave Commands:
 
 balance              Float
 file_filter          Integer
-panscan              Float [Integer]
+
 run                  String
 change_rectangle     Integer Integer
-dvdnav               String
+
 get_vo_fullscreen   
 get_sub_visibility  
 key_down_event       Integer

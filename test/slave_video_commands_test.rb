@@ -226,4 +226,48 @@ context "MPlayer::SlaveVideoCommands" do
     end
   end
   
+  context "panscan" do
+    asserts("panscan 2") { @player.panscan 2}.raises ArgumentError, "Value out of Range -1.0 .. 1.0"
+    context "valid range" do
+      setup { mock_stdin @player, "panscan 0.1 0" }
+      asserts("panscan 0.1") { @player.panscan 0.1 }
+    end
+  end
+  
+  context "dvdnav" do
+    asserts("dvdnav :what") { @player.dvdnav :what }.raises ArgumentError, "Invalid button name"
+    context "up" do
+      setup { mock_stdin @player, "dvdnav up" }
+      asserts("dvdnav :up") { @player.dvdnav :up }
+    end
+    context "down" do
+      setup { mock_stdin @player, "dvdnav down" }
+      asserts("dvdnav :downleft") { @player.dvdnav :down }
+    end
+    context "left" do
+      setup { mock_stdin @player, "dvdnav left" }
+      asserts("dvdnav :left") { @player.dvdnav :left }
+    end
+    context "right" do
+      setup { mock_stdin @player, "dvdnav right" }
+      asserts("dvdnav :right") { @player.dvdnav :right }
+    end
+    context "select" do
+      setup { mock_stdin @player, "dvdnav select" }
+      asserts("dvdnav :select") { @player.dvdnav :select }
+    end
+    context "menu" do
+      setup { mock_stdin @player, "dvdnav menu" }
+      asserts("dvdnav :menu") { @player.dvdnav :menu }
+    end
+    context "prev" do
+      setup { mock_stdin @player, "dvdnav prev" }
+      asserts("dvdnav :prev") { @player.dvdnav :prev }
+    end
+    context "mouse" do
+      setup { mock_stdin @player, "dvdnav mouse" }
+      asserts("dvdnav :mouse") { @player.dvdnav :mouse }
+    end
+  end
+  
 end

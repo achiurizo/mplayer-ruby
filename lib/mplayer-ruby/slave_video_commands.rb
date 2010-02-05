@@ -160,6 +160,22 @@ module MPlayer
       switch = toggle == :toggle ? 1 : 0
       send "screenshot #{switch}"
     end    
-        
+    
+    # Increases or descreases the panscan range by <value>. maximum is 1.0.
+    def panscan(value)
+      raise ArgumentError, "Value out of Range -1.0 .. 1.0" unless value.abs <= 1
+      send "panscan #{value} 0"
+    end
+    
+    # presses the given dvd button
+    # available buttons are:
+    # :up :down :left :right :menu :select :prev :mouse
+    def dvdnav(button)
+      unless %w[up down left right menu select prev mouse].include? button.to_s
+        raise ArgumentError, "Invalid button name"
+      end
+      send "dvdnav #{button}"
+    end
+    
   end
 end
