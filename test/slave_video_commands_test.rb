@@ -6,7 +6,7 @@ context "MPlayer::SlaveVideoCommands" do
     stub(true).gets { "playback" }
     @player = MPlayer::Slave.new('test/test.mp3')
   end
-  
+
   context "audio_delay" do
 
     context "by relative" do
@@ -20,7 +20,7 @@ context "MPlayer::SlaveVideoCommands" do
       asserts("audio_delay 5,:absolute") {  @player.audio_delay 5,:absolute }
     end
   end
-  
+
   context "osd" do
 
     context "toggle" do
@@ -69,7 +69,7 @@ context "MPlayer::SlaveVideoCommands" do
       asserts("mock_stdin 'hello', :level => 5") { @player.osd_show_property_text 'hello', :level => 5 }
     end
   end
-  
+
   %w[contrast gamma brightness hue saturation].each do |setting|
     context setting do
 
@@ -145,7 +145,7 @@ context "MPlayer::SlaveVideoCommands" do
       asserts("switch_vsync :off") { @player.switch_vsync :off }
     end
   end
-  
+
   context "vo_border" do
     context "toggle" do
       setup { mock_stdin @player, "vo_border" }
@@ -162,7 +162,7 @@ context "MPlayer::SlaveVideoCommands" do
       asserts("vo_border :off") { @player.vo_border :off }
     end
   end
-  
+
   context "vo_fullscreen" do
     context "toggle" do
       setup { mock_stdin @player, "vo_fullscreen" }
@@ -179,7 +179,7 @@ context "MPlayer::SlaveVideoCommands" do
       asserts("vo_fullscreen :off") { @player.vo_fullscreen :off }
     end
   end
-  
+
   context "vo_ontop" do
     context "toggle" do
       setup { mock_stdin @player, "vo_ontop" }
@@ -213,19 +213,19 @@ context "MPlayer::SlaveVideoCommands" do
       asserts("vo_rootwin :off") { @player.vo_rootwin :off }
     end
   end
-  
+
   context "screenshot" do
     context "take screenshot" do
       setup { mock_stdin @player, "screenshot 0" }
       asserts("screenshot") { @player.screenshot }
     end
-    
+
     context "start/stop screenshot" do
       setup { mock_stdin @player, "screenshot 1" }
       asserts("screenshot :toggle") { @player.screenshot :toggle }
     end
   end
-  
+
   context "panscan" do
     asserts("panscan 2") { @player.panscan 2}.raises ArgumentError, "Value out of Range -1.0 .. 1.0"
     context "valid range" do
@@ -233,7 +233,7 @@ context "MPlayer::SlaveVideoCommands" do
       asserts("panscan 0.1") { @player.panscan 0.1 }
     end
   end
-  
+
   context "dvdnav" do
     asserts("dvdnav :what") { @player.dvdnav :what }.raises ArgumentError, "Invalid button name"
     context "up" do
@@ -268,6 +268,34 @@ context "MPlayer::SlaveVideoCommands" do
       setup { mock_stdin @player, "dvdnav mouse" }
       asserts("dvdnav :mouse") { @player.dvdnav :mouse }
     end
+  end
+
+  context "get_property" do
+    context "valid property" do
+      setup { mock_send @player, "get_property pause","ANS_pause=no",/pause/ }
+      asserts("get_property :hue") { @player.get_property :pause }.equals "no"
+    end
+    context "failed property" do
+      setup { mock_send @player, "get_property saturation","Failed to get value of property 'saturation'.",/saturation/}
+      asserts("get_property :saturation") { @player.get_property :saturation }.raises StandardError, "Failed to get value of property 'saturation'."
+    end
+  end
+
+  context "set_property" do
+    setup { mock_send @player, "set_property volume 40" }
+    asserts("set_property :volume, 40") { @player.set_property :volume, 40 }
+  end
+  
+  context "step_property" do
+    context ":up" do
+      setup { mock_send @player, "step_property volume 10 1"}
+      asserts("step_property :volume, 10") { @player.step_property :volume, 10}
+    end
+    context ":down" do
+      setup { mock_send @player, "step_property volume 10 -1"}
+      asserts("step_property :volume, -10") { @player.step_property :volume, -10}
+    end
+    
   end
   
 end

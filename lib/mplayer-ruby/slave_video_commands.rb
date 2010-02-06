@@ -177,5 +177,26 @@ module MPlayer
       send "dvdnav #{button}"
     end
     
+    # Print out the current value of a property.
+    # raises an error if it fails to get the property
+    def get_property(value)
+      resp = send("get_property #{value}",/#{value.to_s}/).gsub(/ANS(.+?)\=/,"")
+      raise StandardError,resp if resp =~ /Failed/
+      resp
+    end
+    
+    #Set the value to a property
+    def set_property(name,value)
+      send "set_property #{name} #{value}"
+    end
+    
+    #adjust the propery by steps
+    # if value is < 0, steps downards
+    # else, steps upward
+    def step_property(name,value)
+      direction = value < 0 ? -1 : 1
+      send "step_property #{name} #{value.abs} #{direction}"
+    end
+    
   end
 end
