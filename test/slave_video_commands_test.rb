@@ -298,4 +298,27 @@ context "MPlayer::SlaveVideoCommands" do
     
   end
   
+  context "get_vofullscreen" do
+    context "fullscreen" do
+      setup { mock_send @player, "get_vofullscreen","1",/(0|1)/ }
+      asserts("get_vofullscreen") { @player.get_vofullscreen }
+    end
+    context "windowed" do
+      setup { mock_send @player, "get_vofullscreen","0",/(0|1)/ }
+      asserts("get_vofullscreen") { @player.get_vofullscreen }.equals false
+    end
+
+  end
+  
+  context "get_sub_visibility" do
+    context "on" do
+      setup { mock_send @player, "get_sub_visibility","1",/(0|1)/ }
+      asserts("get_sub_visiblity") { @player.get_sub_visibility }
+    end
+    context "off" do
+      setup { mock_send @player, "get_sub_visibility","0",/(0|1)/ }
+      asserts("get_sub_visiblity") { @player.get_sub_visibility }.equals false
+    end
+  end
+  
 end

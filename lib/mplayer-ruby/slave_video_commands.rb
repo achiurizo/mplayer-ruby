@@ -198,5 +198,25 @@ module MPlayer
       send "step_property #{name} #{value.abs} #{direction}"
     end
     
+    # Returns if it is in fullscreen mode.
+    # true if it is fullscreen
+    # false if it is windowed
+    def get_vofullscreen
+      resp = send "get_vofullscreen",/(0|1)/
+      return true if resp =~ /1/
+      false
+    end
+    alias :is_fullscreen? :get_vofullscreen
+    
+    # Returns if it the sub is visibile mode.
+    # true if it is fullscreen
+    # false if it is windowed
+    def get_sub_visibility
+      resp = send "get_sub_visibility",/(0|1)/
+      return true if resp =~ /1/
+      false
+    end
+    alias :is_sub_visible? :get_sub_visibility
+    
   end
 end

@@ -5,8 +5,6 @@ balance              Float
 file_filter          Integer
 run                  String
 change_rectangle     Integer Integer
-get_vo_fullscreen   
-get_sub_visibility  
 key_down_event       Integer
 seek_chapter         Integer [Integer]
 set_mouse_pos        Integer Integer
