@@ -6,9 +6,9 @@ file_filter          Integer
 run                  String
 change_rectangle     Integer Integer
 key_down_event       Integer
-seek_chapter         Integer [Integer]
+
 set_mouse_pos        Integer Integer
-vobsub_lang          [Integer]
+vobsub_lang          [Integer] - stub linked
 sub_log
 
 Player Options

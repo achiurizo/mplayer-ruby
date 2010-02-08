@@ -320,5 +320,20 @@ context "MPlayer::SlaveVideoCommands" do
       asserts("get_sub_visiblity") { @player.get_sub_visibility }.equals false
     end
   end
+
+  context "seek_chapter" do
+
+    context "relative" do
+      setup { mock_stdin @player, "seek_chapter 5 0" }
+      asserts("seek_chapter 5, :relative") { @player.seek_chapter(5, :relative) }
+      asserts("seek_chapter 5") { @player.seek_chapter(5) }
+    end
+
+    context "absolute" do
+      setup { mock_stdin @player, "seek_chapter 5 1" }
+      asserts("seek_chapter 5, :absolute") { @player.seek_chapter( 5, :absolute) }
+    end
+  end
+
   
 end

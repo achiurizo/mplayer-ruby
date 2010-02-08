@@ -218,5 +218,12 @@ module MPlayer
     end
     alias :is_sub_visible? :get_sub_visibility
     
+    # Seek to the start of a chapter
+    # :relative does a relative seek (+/-)
+    # :absolute goes to the exact value of chapter
+    def seek_chapter(value, type = :relative)
+      adjust_set :seek_chapter, value, type
+    end
+    
   end
 end
