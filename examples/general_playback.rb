@@ -50,7 +50,7 @@ puts $player.seek 10, :percent
 puts $player.seek 20, :absolute
 
 # sets the speed of playback
-puts ($player.speed 2,:increment)
+puts $player.speed 2,:increment
 puts $player.speed 2,:multiply
 puts $player.speed 1
 

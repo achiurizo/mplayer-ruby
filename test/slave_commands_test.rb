@@ -235,5 +235,9 @@ context "MPlayer::SlaveCommands" do
     end
   end
 
+  context "balance" do
+    setup { mock_send @player, "balance 2.1" }
+    asserts("blance 2.1") { @player.balance 2.1 }
+  end
 
 end

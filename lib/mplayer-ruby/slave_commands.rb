@@ -161,6 +161,11 @@ module MPlayer
       speed_setting :speed_set, value
     end
 
+    #set balance to <value>
+    def balance(value)
+      send("balance #{value}")
+    end
+    
     # Play one frame, then pause again.
     def frame_step; send("frame_step"); end
 

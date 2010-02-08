@@ -1,7 +1,6 @@
 
 Slave Commands:
 
-balance              Float
 file_filter          Integer
 run                  String
 change_rectangle     Integer Integer
