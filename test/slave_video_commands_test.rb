@@ -335,5 +335,32 @@ context "MPlayer::SlaveVideoCommands" do
     end
   end
 
+  context "change_rectangle" do
+    context "relative" do
+      context "x" do
+        setup { mock_send @player, "change_rectangle 2 2" }
+        asserts("change_rectangle :x, 2, :relative") { @player.change_rectangle :x, 2, :relative }
+        asserts("change_rectangle :x, 2") { @player.change_rectangle :x, 2 }
+      end
+      
+      context "y" do
+        setup { mock_send @player, "change_rectangle 3 2" }
+        asserts("change_rectangle :y, 2, :relative") { @player.change_rectangle :y, 2, :relative }
+        asserts("change_rectangle :y, 2") { @player.change_rectangle :y, 2 }
+      end
+    end
+    context "absolute" do
+      context "x" do
+        setup { mock_send @player, "change_rectangle 0 2" }
+        asserts("change_rectangle :x, 2, :absolute") { @player.change_rectangle :x, 2, :absolute }
+      end
+      
+      context "y" do
+        setup { mock_send @player, "change_rectangle 1 2" }
+        asserts("change_rectangle :y, 2, :absolute") { @player.change_rectangle :y, 2, :absolute }
+      end
+    end
+  end
+  
   
 end

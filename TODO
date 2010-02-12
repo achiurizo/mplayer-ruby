@@ -3,7 +3,6 @@ Slave Commands:
 
 file_filter          Integer
 run                  String
-change_rectangle     Integer Integer
 key_down_event       Integer
 
 set_mouse_pos        Integer Integer

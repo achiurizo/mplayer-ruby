@@ -225,5 +225,13 @@ module MPlayer
       adjust_set :seek_chapter, value, type
     end
     
+    def change_rectangle(coord,value,type = :relative)
+      switch = case coord
+      when :x then (0 + (type == :relative ? 2 : 0))
+      when :y then (1 + (type == :relative ? 2 : 0))
+      end
+      send("change_rectangle #{switch} #{value}")
+    end
+    
   end
 end
