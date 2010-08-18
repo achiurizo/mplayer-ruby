@@ -1,10 +1,9 @@
 require 'rubygems'
 require 'riot'
-require 'rr'
+require 'riot/rr'
+
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'mplayer-ruby'
-
-Riot.rr
 
 def mock_stdin(player,input,output="")
   mock(player.stdin).puts(input) { output }

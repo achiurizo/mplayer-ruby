@@ -1,10 +1,8 @@
 
 Slave Commands:
-
 file_filter          Integer
 run                  String
 key_down_event       Integer
-
 set_mouse_pos        Integer Integer
 vobsub_lang          [Integer] - stub linked
 sub_log
