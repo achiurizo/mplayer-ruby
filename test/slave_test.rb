@@ -7,11 +7,11 @@ context "MPlayer::Player" do
     @player = MPlayer::Slave.new('test/test.mp3')
   end
   asserts("invalid file") { MPlayer::Slave.new('boooger') }.raises ArgumentError,"Invalid File"
-  asserts("@file").assigns(:file)
-  asserts("@pid").assigns(:pid)
-  asserts("@stdin").assigns(:stdin)
-  asserts("@stdout").assigns(:stdout)
-  asserts("@stderr").assigns(:stderr)
+  asserts("@file") { topic }.assigns(:file)
+  asserts("@pid") { topic }.assigns(:pid)
+  asserts("@stdin") { topic }.assigns(:stdin)
+  asserts("@stdout") { topic }.assigns(:stdout)
+  asserts("@stderr") { topic }.assigns(:stderr)
 
   
 end
