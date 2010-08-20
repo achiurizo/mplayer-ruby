@@ -12,6 +12,10 @@ context "MPlayer::SlaveVideoCommands" do
     context "by relative" do
       setup { mock_stdin @player, "audio_delay 5 0" }
       asserts("audio_delay 5") { @player.audio_delay 5 }
+    end
+
+    context "explicitly by relative" do
+      setup { mock_stdin @player, "audio_delay 5 0" }
       asserts("audio_delay 5,:relative") {  @player.audio_delay 5,:relative }
     end
 
@@ -76,6 +80,10 @@ context "MPlayer::SlaveVideoCommands" do
       context "relative" do
         setup { mock_stdin @player, "#{setting} 5 0" }
         asserts("#{setting} 5, :relative") { @player.method(setting).call(5, :relative) }
+      end
+
+      context "explicit relative" do
+        setup { mock_stdin @player, "#{setting} 5 0" }
         asserts("#{setting} 5") { @player.method(setting).call(5) }
       end
 
@@ -118,6 +126,10 @@ context "MPlayer::SlaveVideoCommands" do
       context "cycle" do
         setup { mock_stdin @player, "#{switch} -2" }
         asserts("#{switch}") { @player.method(switch).call }
+      end
+
+      context "explicit cycle" do
+        setup { mock_stdin @player, "#{switch} -2" }
         asserts("#{switch} :cycle") { @player.method(switch).call :cycle }
       end
 
@@ -325,8 +337,12 @@ context "MPlayer::SlaveVideoCommands" do
 
     context "relative" do
       setup { mock_stdin @player, "seek_chapter 5 0" }
-      asserts("seek_chapter 5, :relative") { @player.seek_chapter(5, :relative) }
       asserts("seek_chapter 5") { @player.seek_chapter(5) }
+    end
+
+    context "explicit relative" do
+      setup { mock_stdin @player, "seek_chapter 5 0" }
+      asserts("seek_chapter 5, :relative") { @player.seek_chapter(5, :relative) }
     end
 
     context "absolute" do
@@ -339,13 +355,21 @@ context "MPlayer::SlaveVideoCommands" do
     context "relative" do
       context "x" do
         setup { mock_send @player, "change_rectangle 2 2" }
-        asserts("change_rectangle :x, 2, :relative") { @player.change_rectangle :x, 2, :relative }
         asserts("change_rectangle :x, 2") { @player.change_rectangle :x, 2 }
       end
       
+      context "explicit relative x" do
+        setup { mock_send @player, "change_rectangle 2 2" }
+        asserts("change_rectangle :x, 2, :relative") { @player.change_rectangle :x, 2, :relative }
+      end
+
       context "y" do
         setup { mock_send @player, "change_rectangle 3 2" }
         asserts("change_rectangle :y, 2, :relative") { @player.change_rectangle :y, 2, :relative }
+      end
+
+      context "explicit relative y" do
+        setup { mock_send @player, "change_rectangle 3 2" }
         asserts("change_rectangle :y, 2") { @player.change_rectangle :y, 2 }
       end
     end

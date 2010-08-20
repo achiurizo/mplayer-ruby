@@ -46,15 +46,23 @@ context "MPlayer::SlaveTvCommands" do
   context "tv_set_channel" do
     setup { mock_stdin @player, "tv_set_channel 1" }
     asserts("tv_set_channel 1") { @player.tv_set_channel 1 }
+  end
+  
+  context "set_channel" do
+    setup { mock_stdin @player, "tv_set_channel 1" }
     asserts("set_channel 1") { @player.set_channel 1 }
   end
   
   context "tv_last_channel" do
     setup { mock_stdin @player, "tv_last_channel" }
     asserts("tv_last_channel") { @player.tv_last_channel }
-    asserts("last_channel") { @player.last_channel }
   end
   
+  context "last_channel" do
+    setup { mock_stdin @player, "tv_last_channel" }
+    asserts("last_channel") { @player.last_channel }
+  end
+
   context "tv_set_freq" do
     setup { mock_stdin @player, "tv_set_freq 1.92" }
     asserts("tv_set_freq 1.92") { @player.tv_set_freq 1.92 }
@@ -68,17 +76,29 @@ context "MPlayer::SlaveTvCommands" do
   context "tv_set_norm" do
     setup { mock_stdin @player, "tv_set_norm NTSC" }
     asserts(":ntsc") {  @player.tv_set_norm :ntsc }
-    asserts("ntsc") { @player.tv_set_norm 'ntsc' }
-    asserts("NTSC") { @player.tv_set_norm 'NTSC' }
   end
   
+  context "tv_set_norm ntsc" do
+    setup { mock_stdin @player, "tv_set_norm NTSC" }
+    asserts("ntsc") { @player.tv_set_norm 'ntsc' }
+  end
+
+  context "tv_set_norm NTSC" do
+    setup { mock_stdin @player, "tv_set_norm NTSC" }
+    asserts("NTSC") { @player.tv_set_norm 'NTSC' }
+  end
+
   %w[tv_set_contrast tv_set_brightness tv_set_hue tv_set_saturation].each do |setting|
     context setting do
 
       context "relative" do
         setup { mock_stdin @player, "#{setting} 5 0" }
-        asserts("#{setting} 5, :relative") { @player.method(setting).call(5, :relative) }
         asserts("#{setting} 5") { @player.method(setting).call(5) }
+      end
+
+      context "explicit relative" do
+        setup { mock_stdin @player, "#{setting} 5 0" }
+        asserts("#{setting} 5, :relative") { @player.method(setting).call(5, :relative) }
       end
 
       context "absolute" do

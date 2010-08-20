@@ -12,12 +12,16 @@ context "MPlayer::SlaveSubCommands" do
     context "absolute" do
       setup { mock_stdin @player, "sub_delay 5 1" }
       asserts("sub_delay 5") {  @player.sub_delay 5 }
-      asserts("sub_delay 5, :relative") { @player.sub_delay 5,:absolute }
+    end
+
+    context "explicit absolute" do
+      setup { mock_stdin @player, "sub_delay 5 1" }
+      asserts("sub_delay 5, :absolute") { @player.sub_delay 5,:absolute }
     end
 
     context "relative" do
       setup { mock_stdin @player, "sub_delay 5 0" }
-      asserts("sub_delay 5, :absolute") { @player.sub_delay 5, :relative }
+      asserts("sub_delay 5, :relative") { @player.sub_delay 5, :relative }
     end
   end
 
@@ -26,12 +30,20 @@ context "MPlayer::SlaveSubCommands" do
     context "next" do
       setup { mock_stdin @player, "sub_step 5" }
       asserts("sub_step 5") { @player.sub_step 5 }
+    end
+
+    context "explicit next" do
+      setup { mock_stdin @player, "sub_step 5" }
       asserts("sub_step 5,:next") { @player.sub_step 5, :next }
     end
 
     context "prev" do
       setup { mock_stdin @player, "sub_step -5" }
       asserts("sub_step -5") { @player.sub_step -5 }
+    end
+
+    context "explicit prev" do
+      setup { mock_stdin @player, "sub_step -5" }
       asserts("sub_step 5,:backward") { @player.sub_step 5,:prev }
     end
   end
@@ -40,6 +52,10 @@ context "MPlayer::SlaveSubCommands" do
     context "by relative" do
       setup { mock_stdin @player, "sub_pos 5 0"  }
       asserts("sub_pos 5") { @player.sub_pos 5 }
+    end
+
+    context "by explicit relative" do
+      setup { mock_stdin @player, "sub_pos 5 0"  }
       asserts("sub_pos 5,:relative") {  @player.sub_pos 5,:relative }
     end
 
@@ -104,6 +120,10 @@ context "MPlayer::SlaveSubCommands" do
     context "all" do
       setup { mock_stdin @player, "sub_remove -1" }
       asserts("sub_remove") { @player.sub_remove }
+    end
+
+    context "explicit all" do
+      setup { mock_stdin @player, "sub_remove -1" }
       asserts("sub_remove :all") { @player.sub_remove :all }
     end
 
@@ -123,6 +143,10 @@ context "MPlayer::SlaveSubCommands" do
     context "cycle" do
       setup { mock_stdin @player, "sub_select -2" }
       asserts("sub_select") { @player.sub_select }
+    end
+
+    context "explicit cycle" do
+      setup { mock_stdin @player, "sub_select -2" }
       asserts("sub_select :cycle") { @player.sub_select :cycle }
     end
   end
@@ -152,6 +176,10 @@ context "MPlayer::SlaveSubCommands" do
     context "cycle" do
       setup { mock_stdin @player, "sub_source -2" }
       asserts("sub_source :cycle") { @player.sub_source :cycle }
+    end
+
+    context "explicit cycle" do
+      setup { mock_stdin @player, "sub_source -2" }
       asserts("sub_source") { @player.sub_source }
     end
   end
@@ -173,6 +201,10 @@ context "MPlayer::SlaveSubCommands" do
       context "cycle" do
         setup { mock_stdin @player, "#{sub} -2" }
         asserts("#{sub} :cycle") { @player.method(sub).call :cycle }
+      end
+
+      context "explicit cycle" do
+        setup { mock_stdin @player, "#{sub} -2" }
         asserts("#{sub}") { @player.method(sub).call }
       end
     end
@@ -182,6 +214,10 @@ context "MPlayer::SlaveSubCommands" do
     context "by relative" do
       setup { mock_stdin @player, "sub_scale 5 0" }
       asserts("sub_scale 5") { @player.sub_scale 5 }
+    end
+
+    context "explicitly by relative" do
+      setup { mock_stdin @player, "sub_scale 5 0" }
       asserts("sub_scale 5,:relative") {  @player.sub_scale 5,:relative }
     end
 

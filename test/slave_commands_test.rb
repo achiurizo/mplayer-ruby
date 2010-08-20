@@ -48,6 +48,10 @@ context "MPlayer::SlaveCommands" do
     context "by relative" do
       setup { mock_send @player, "seek 5 0","Position: 10 %\n",/Position/ }
       asserts("seek 5") { @player.seek 5 }
+    end
+
+    context "explicit relative" do
+      setup { mock_send @player, "seek 5 0","Position: 10 %\n",/Position/ }
       asserts("seek 5,:relative") { @player.seek 5,:relative }.equals "10"
     end
 
@@ -103,6 +107,10 @@ context "MPlayer::SlaveCommands" do
     context "set" do
       setup { mock(@player).speed_set(5) { true } }
       asserts("speed 5") {  @player.speed 5 }
+    end
+
+    context "explicit set" do
+      setup { mock(@player).speed_set(5) { true } }
       asserts("speed 5, :set") {  @player.speed 5,:set }
     end
   end
@@ -122,6 +130,10 @@ context "MPlayer::SlaveCommands" do
     context "not forced" do
       setup { mock_send @player, "pt_step 5 0"  }
       asserts("pt_step 5") {  @player.pt_step 5 }
+    end
+
+    context "explicit not forced" do
+      setup { mock_send @player, "pt_step 5 0"  }
       asserts("pt_step 5, :no_force") { @player.pt_step 5, :no_force }
     end
   end
@@ -136,6 +148,10 @@ context "MPlayer::SlaveCommands" do
     context "not forced" do
       setup { mock_send @player, "pt_up_step 5 0" }
       asserts("pt_up_step 5") { @player.pt_up_step 5 }
+    end
+
+    context "explicit not forced" do
+      setup { mock_send @player, "pt_up_step 5 0" }
       asserts("pt_up_step 5, :no_force") { @player.pt_up_step 5, :no_force }
     end
   end
@@ -155,6 +171,10 @@ context "MPlayer::SlaveCommands" do
     context "forever" do
       setup { mock_send @player, "loop 0" }
       asserts("loop") { @player.loop }
+    end
+
+    context "explicit forever" do
+      setup { mock_send @player, "loop 0" }
       asserts("loop :forever") { @player.loop :forever }
     end
 
@@ -216,6 +236,10 @@ context "MPlayer::SlaveCommands" do
     context "no append" do
       setup { mock_send @player, "loadfile test/test.mp3 0" }
       asserts("load_file test/test.mp3") { @player.load_file 'test/test.mp3' }
+    end
+
+    context "explicit no append" do
+      setup { mock_send @player, "loadfile test/test.mp3 0" }
       asserts("load_file test/test.mp3, :no_append") { @player.load_file 'test/test.mp3', :no_append }
     end
   end
@@ -231,6 +255,11 @@ context "MPlayer::SlaveCommands" do
     context "no append" do
       setup { mock_send @player, "loadlist test/test.mp3 0" }
       asserts("load_list test/test.mp3") { @player.load_list 'test/test.mp3' }
+      # asserts("load_list test/test.mp3, :no_append") { @player.load_list 'test/test.mp3', :no_append }
+    end
+
+    context "explicit no append" do
+      setup { mock_send @player, "loadlist test/test.mp3 0" }
       asserts("load_list test/test.mp3, :no_append") { @player.load_list 'test/test.mp3', :no_append }
     end
   end
