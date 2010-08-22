@@ -21,8 +21,6 @@ rescue LoadError
   end
 end
 
-task :test => :check_dependencies
-
 begin
   require 'reek/adapters/rake_task'
   Reek::RakeTask.new do |t|

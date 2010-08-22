@@ -1,36 +1,28 @@
-= mplayer-ruby
+# mplayer-ruby
 
 A Ruby Wrapper for MPlayer. Controls MPlayer via the Slave Protocol.
 
-See (RDOC)[http://mplayer-ruby.rubyforge.org/mplayer-ruby/index.html] for additional information.
+See [RDOC](http://mplayer-ruby.rubyforge.org/mplayer-ruby/index.html) for additional information.
 
-See examples/[http://github.com/achiu/mplayer-ruby/tree/master/examples/] for usage.
-
-
-== Installation
+See [examples/](http://github.com/achiu/mplayer-ruby/tree/master/examples/) for usage.
 
 
-=== MPlayer
+## Installation
 
-==== Linux
+
+### MPlayer
+
+#### Linux
 
     $ sudo apt-get install mplayer
     
-==== Mac OS X
+#### Mac OS X
 
-===== via Homebrew
+##### via Homebrew
 
     $ brew install mplayer
     
-===== via download
-
- download (Mac OS X Extended)[http://www.mplayerhq.hu/homepage/design7/news.html].
-
- then create a symbolic link for mplayer.
- 
-    $ sudo ln -s "/Applications/MPlayer OSX Extended.app/Contents/Resources/External_Binaries/mplayer.app/Contents/MacOS/mplayer" /usr/bin/mplayer
-
-=== MPlayer-ruby
+### MPlayer-ruby
 
 It's hosted on gemcutter.org
 
@@ -38,13 +30,13 @@ It's hosted on gemcutter.org
 
 
 
-== TODO
+## TODO
 * Complete Slave Protocol 
 * Complete Other Functionalities 
 * Create a Better README
 * Example Usages
 
-== Note on Patches/Pull Requests
+## Note on Patches/Pull Requests
  
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -54,6 +46,6 @@ It's hosted on gemcutter.org
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-== Copyright
+## Copyright
 
 Copyright (c) 2010 Arthur Chiu. See LICENSE for details.
