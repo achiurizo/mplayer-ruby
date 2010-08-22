@@ -1,11 +1,7 @@
 require File.expand_path("teststrap", File.dirname(__FILE__))
 
 context "MPlayer::SlaveCommands" do
-  setup do
-    mock(Open4).popen4("/usr/bin/mplayer -slave -quiet test/test.mp3") { [true,true,true,true] }
-    stub(true).gets { "playback" }
-    @player = MPlayer::Slave.new('test/test.mp3')
-  end
+  setup_player
 
   context "pause" do
     setup { mock_send @player, "pause" }
@@ -15,12 +11,13 @@ context "MPlayer::SlaveCommands" do
   context "quit" do
     setup do
       mock_send @player, "quit"
-      mock(@player.stdin).close { true }
+      mock(@player.stdin).close { true } ; @player
     end
     asserts("returns true") { @player.quit }
   end
 
   context "volume" do
+    asserts("incorrect action") { @player.volume :boo }.equals false
 
     context "increases" do
       setup { mock_send @player, "volume 1","Volume: 10 %\n",/Volume/ }
@@ -35,11 +32,6 @@ context "MPlayer::SlaveCommands" do
     context "sets volume" do
       setup { mock_send @player, "volume 40 1","Volume: 10 %\n",/Volume/ }
       asserts("returns true") { @player.volume :set,40 }.equals "10"
-    end
-
-    context "incorrect action" do
-      setup { @player.volume :boo }
-      asserts("returns false").equals false
     end
   end
 

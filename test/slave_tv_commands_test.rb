@@ -1,14 +1,10 @@
 require File.expand_path("teststrap", File.dirname(__FILE__))
 
 context "MPlayer::SlaveTvCommands" do
-  setup do
-    mock(Open4).popen4("/usr/bin/mplayer -slave -quiet test/test.mp3") { [true,true,true,true] }
-    stub(true).gets { "playback" }
-    @player = MPlayer::Slave.new('test/test.mp3')
-  end
+  setup_player
   
   context "tv_start_scan" do
-    setup { mock_stdin @player, "tv_start_scan" }
+    setup { mock_stdin @player, "tv_start_scan" ; @player}
     asserts("tv_start_scan") { @player.tv_start_scan }
   end
   

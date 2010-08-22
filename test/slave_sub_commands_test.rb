@@ -1,11 +1,7 @@
 require File.expand_path("teststrap", File.dirname(__FILE__))
 
 context "MPlayer::SlaveSubCommands" do
-  setup do
-    mock(Open4).popen4("/usr/bin/mplayer -slave -quiet test/test.mp3") { [true,true,true,true] }
-    stub(true).gets { "playback" }
-    @player = MPlayer::Slave.new('test/test.mp3')
-  end
+  setup_player
   
   context "sub_delay" do
 
