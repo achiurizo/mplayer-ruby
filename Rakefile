@@ -1,29 +1,6 @@
 require 'rubygems'
 require 'rake'
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "mplayer-ruby"
-    gem.summary = %Q{Ruby wrapper for MPlayer}
-    gem.description = %Q{A Ruby wrapper for MPlayer}
-    gem.email = "mr.arthur.chiu@gmail.com"
-    gem.homepage = "http://github.com/achiu/mplayer-ruby"
-    gem.authors = ["Arthur Chiu"]
-    gem.rubyforge_project = "mplayer-ruby"
-    gem.add_development_dependency "riot", ">= 0.10.11"
-    gem.add_development_dependency "rr", ">=0.10.5"
-    gem.add_dependency "open4", ">=1.0.1"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-  end
-  Jeweler::GemcutterTasks.new
-  Jeweler::RubyforgeTasks.new do |rubyforge|
-    rubyforge.doc_task = "rdoc"
-  end
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
-end
-
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
