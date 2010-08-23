@@ -13,3 +13,11 @@ context "MPlayer::Player" do
   asserts_topic.assigns(:stdout)
   asserts_topic.assigns(:stderr)
 end
+
+context "MPlayer::Player with screenshots enabled" do
+  setup do 
+    mock(Open4).popen4("/usr/bin/mplayer -slave -quiet -vf screenshot test/test.mp3") { [true,true,true,true] } 
+    stub(true).gets { "playback" }
+  end
+  asserts("new :screenshot") { MPlayer::Slave.new('test/test.mp3', :screenshot => true) }
+end
