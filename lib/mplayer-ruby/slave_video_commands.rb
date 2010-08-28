@@ -157,8 +157,13 @@ module MPlayer
     # nil Take a single screenshot.
     # :toggle Start/stop taking screenshot of each frame.
     def screenshot(toggle=nil)
-      switch = toggle == :toggle ? 1 : 0
-      send "screenshot #{switch}"
+      switch, pattern = case toggle
+      when :toggle
+        [ 1, // ]
+      else
+        [ 0, /screenshot/ ]
+      end
+      (send("screenshot #{switch}", pattern)) =~ /(shot\d*\.png)/ ? $~[1] : ""
     end    
     
     # Increases or descreases the panscan range by <value>. maximum is 1.0.
