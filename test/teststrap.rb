@@ -26,6 +26,10 @@ class Riot::Situation
     stub(true).gets { "playback" }
     MPlayer::Slave.new('test/test.mp3')
   end
+
+  def mock_stdout(player, input, output="")
+    mock(player.stdout).gets { output }
+  end
 end
 
 class Riot::Context
