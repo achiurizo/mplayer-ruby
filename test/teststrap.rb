@@ -15,9 +15,9 @@ class Riot::Situation
   end
 
   # mocks send method
-  def mock_send(player,input,output="",match=nil)
-    return mock(player).send(input) { output } unless match
-    mock(player).send(input,match) { output }
+  def mock_command(player,input,output="",match=nil)
+    return mock(player).command(input) { output } unless match
+    mock(player).command(input,match) { output }
   end
   
   # mocks Open4

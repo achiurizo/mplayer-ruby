@@ -11,7 +11,7 @@ module MPlayer
     # Toggle OSD mode
     # or set it to <level>
     def osd(level=nil)
-      send(level.nil? ? "osd" : "osd #{level}")
+      command(level.nil? ? "osd" : "osd #{level}")
     end
 
     # Show <string> on the OSD.
@@ -19,7 +19,7 @@ module MPlayer
     # :level sets the osd level to display at. (default: 0 => always show)
     def osd_show_text(string,options = {})
       options.reverse_merge!({:duration => 0, :level => 0})
-      send("osd_show_text #{string} #{options[:duration]} #{options[:level]}")
+      command("osd_show_text #{string} #{options[:duration]} #{options[:level]}")
     end
 
     # Show an expanded property string on the OSD
@@ -28,7 +28,7 @@ module MPlayer
     # :level sets the osd level to display at. (default: 0 => always show)
     def osd_show_property_text(string,options={})
       options.reverse_merge!({:duration => 0, :level => 0})
-      send("osd_show_property_text #{string} #{options[:duration]} #{options[:level]}")
+      command("osd_show_property_text #{string} #{options[:duration]} #{options[:level]}")
     end
     
     # Set/adjust video parameters.
@@ -103,7 +103,7 @@ module MPlayer
     # <value> Change aspect ratio at runtime. [value] is the new aspect ratio expressed
     # as a float (e.g. 1.77778 for 16/9).
     # There might be problems with some video filters.
-    def switch_ratio(value); send("switch_ratio #{value}"); end
+    def switch_ratio(value); command("switch_ratio #{value}"); end
 
     # switch_vsync [value]
     # :on Toggle vsync on
@@ -163,13 +163,13 @@ module MPlayer
       else
         [ 0, /screenshot/ ]
       end
-      (send("screenshot #{switch}", pattern)) =~ /(shot\d*\.png)/ ? $~[1] : ""
+      (command("screenshot #{switch}", pattern)) =~ /(shot\d*\.png)/ ? $~[1] : ""
     end    
     
     # Increases or descreases the panscan range by <value>. maximum is 1.0.
     def panscan(value)
       raise ArgumentError, "Value out of Range -1.0 .. 1.0" unless value.abs <= 1
-      send "panscan #{value} 0"
+      command "panscan #{value} 0"
     end
     
     # presses the given dvd button
@@ -179,20 +179,20 @@ module MPlayer
       unless %w[up down left right menu select prev mouse].include? button.to_s
         raise ArgumentError, "Invalid button name"
       end
-      send "dvdnav #{button}"
+      command "dvdnav #{button}"
     end
     
     # Print out the current value of a property.
     # raises an error if it fails to get the property
     def get_property(value)
-      resp = send("get_property #{value}",/#{value.to_s}/).gsub(/ANS(.+?)\=/,"")
+      resp = command("get_property #{value}",/#{value.to_s}/).gsub(/ANS(.+?)\=/,"")
       raise StandardError,resp if resp =~ /Failed/
       resp
     end
     
     #Set the value to a property
     def set_property(name,value)
-      send "set_property #{name} #{value}"
+      command "set_property #{name} #{value}"
     end
     
     #adjust the propery by steps
@@ -200,14 +200,14 @@ module MPlayer
     # else, steps upward
     def step_property(name,value)
       direction = value < 0 ? -1 : 1
-      send "step_property #{name} #{value.abs} #{direction}"
+      command "step_property #{name} #{value.abs} #{direction}"
     end
     
     # Returns if it is in fullscreen mode.
     # true if it is fullscreen
     # false if it is windowed
     def get_vofullscreen
-      resp = send "get_vofullscreen",/(0|1)/
+      resp = command "get_vofullscreen",/(0|1)/
       return true if resp =~ /1/
       false
     end
@@ -217,7 +217,7 @@ module MPlayer
     # true if it is fullscreen
     # false if it is windowed
     def get_sub_visibility
-      resp = send "get_sub_visibility",/(0|1)/
+      resp = command "get_sub_visibility",/(0|1)/
       return true if resp =~ /1/
       false
     end
@@ -235,7 +235,7 @@ module MPlayer
       when :x then (0 + (type == :relative ? 2 : 0))
       when :y then (1 + (type == :relative ? 2 : 0))
       end
-      send("change_rectangle #{switch} #{value}")
+      command("change_rectangle #{switch} #{value}")
     end
     
   end

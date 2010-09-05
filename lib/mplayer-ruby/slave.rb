@@ -25,9 +25,9 @@ module MPlayer
       end #fast forward past mplayer's initial output
     end
 
-    # sends command to mplayer stdin and retrieves stdout.
+    # commands command to mplayer stdin and retrieves stdout.
     # If match is provided, fast-forwards stdout to matching response.
-    def send(cmd,match = //)
+    def command(cmd,match = //)
       @stdin.puts(cmd)
       response = ""
       until response =~ match
@@ -44,7 +44,7 @@ module MPlayer
       when :cycle then -2
       else value
       end
-      send "#{command} #{switch}",match
+      command "#{command} #{switch}",match
     end
 
     def toggle(command,value,match = //)
@@ -53,7 +53,7 @@ module MPlayer
       when :off then "#{command} 0"
       else "#{command}"
       end
-      send cmd,match
+      command cmd,match
     end
 
     def setting(command,value,type, match = //)
@@ -63,7 +63,7 @@ module MPlayer
 
     def adjust_set(command,value,type = :relative, match = //)
       switch = ( type == :relative ? 0 : 1 )
-      send "#{command} #{value} #{switch}",match
+      command "#{command} #{value} #{switch}",match
     end
 
   end

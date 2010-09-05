@@ -293,27 +293,27 @@ context "MPlayer::SlaveVideoCommands" do
 
   context "get_property" do
     context "valid property" do
-      setup { mock_send @player, "get_property pause","ANS_pause=no",/pause/ }
+      setup { mock_command @player, "get_property pause","ANS_pause=no",/pause/ }
       asserts("get_property :hue") { @player.get_property :pause }.equals "no"
     end
     context "failed property" do
-      setup { mock_send @player, "get_property saturation","Failed to get value of property 'saturation'.",/saturation/}
+      setup { mock_command @player, "get_property saturation","Failed to get value of property 'saturation'.",/saturation/}
       asserts("get_property :saturation") { @player.get_property :saturation }.raises StandardError, "Failed to get value of property 'saturation'."
     end
   end
 
   context "set_property" do
-    setup { mock_send @player, "set_property volume 40" }
+    setup { mock_command @player, "set_property volume 40" }
     asserts("set_property :volume, 40") { @player.set_property :volume, 40 }
   end
   
   context "step_property" do
     context ":up" do
-      setup { mock_send @player, "step_property volume 10 1"}
+      setup { mock_command @player, "step_property volume 10 1"}
       asserts("step_property :volume, 10") { @player.step_property :volume, 10}
     end
     context ":down" do
-      setup { mock_send @player, "step_property volume 10 -1"}
+      setup { mock_command @player, "step_property volume 10 -1"}
       asserts("step_property :volume, -10") { @player.step_property :volume, -10}
     end
     
@@ -321,11 +321,11 @@ context "MPlayer::SlaveVideoCommands" do
   
   context "get_vofullscreen" do
     context "fullscreen" do
-      setup { mock_send @player, "get_vofullscreen","1",/(0|1)/ }
+      setup { mock_command @player, "get_vofullscreen","1",/(0|1)/ }
       asserts("get_vofullscreen") { @player.get_vofullscreen }
     end
     context "windowed" do
-      setup { mock_send @player, "get_vofullscreen","0",/(0|1)/ }
+      setup { mock_command @player, "get_vofullscreen","0",/(0|1)/ }
       asserts("get_vofullscreen") { @player.get_vofullscreen }.equals false
     end
 
@@ -333,11 +333,11 @@ context "MPlayer::SlaveVideoCommands" do
   
   context "get_sub_visibility" do
     context "on" do
-      setup { mock_send @player, "get_sub_visibility","1",/(0|1)/ }
+      setup { mock_command @player, "get_sub_visibility","1",/(0|1)/ }
       asserts("get_sub_visiblity") { @player.get_sub_visibility }
     end
     context "off" do
-      setup { mock_send @player, "get_sub_visibility","0",/(0|1)/ }
+      setup { mock_command @player, "get_sub_visibility","0",/(0|1)/ }
       asserts("get_sub_visiblity") { @player.get_sub_visibility }.equals false
     end
   end
@@ -363,33 +363,33 @@ context "MPlayer::SlaveVideoCommands" do
   context "change_rectangle" do
     context "relative" do
       context "x" do
-        setup { mock_send @player, "change_rectangle 2 2" }
+        setup { mock_command @player, "change_rectangle 2 2" }
         asserts("change_rectangle :x, 2") { @player.change_rectangle :x, 2 }
       end
       
       context "explicit relative x" do
-        setup { mock_send @player, "change_rectangle 2 2" }
+        setup { mock_command @player, "change_rectangle 2 2" }
         asserts("change_rectangle :x, 2, :relative") { @player.change_rectangle :x, 2, :relative }
       end
 
       context "y" do
-        setup { mock_send @player, "change_rectangle 3 2" }
+        setup { mock_command @player, "change_rectangle 3 2" }
         asserts("change_rectangle :y, 2, :relative") { @player.change_rectangle :y, 2, :relative }
       end
 
       context "explicit relative y" do
-        setup { mock_send @player, "change_rectangle 3 2" }
+        setup { mock_command @player, "change_rectangle 3 2" }
         asserts("change_rectangle :y, 2") { @player.change_rectangle :y, 2 }
       end
     end
     context "absolute" do
       context "x" do
-        setup { mock_send @player, "change_rectangle 0 2" }
+        setup { mock_command @player, "change_rectangle 0 2" }
         asserts("change_rectangle :x, 2, :absolute") { @player.change_rectangle :x, 2, :absolute }
       end
       
       context "y" do
-        setup { mock_send @player, "change_rectangle 1 2" }
+        setup { mock_command @player, "change_rectangle 1 2" }
         asserts("change_rectangle :y, 2, :absolute") { @player.change_rectangle :y, 2, :absolute }
       end
     end

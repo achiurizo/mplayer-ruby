@@ -4,13 +4,13 @@ context "MPlayer::SlaveCommands" do
   setup_player
 
   context "pause" do
-    setup { mock_send @player, "pause" }
+    setup { mock_command @player, "pause" }
     asserts("returns true") { @player.pause }
   end
 
   context "quit" do
     setup do
-      mock_send @player, "quit"
+      mock_command @player, "quit"
       mock(@player.stdin).close { true } ; @player
     end
     asserts("returns true") { @player.quit }
@@ -20,17 +20,17 @@ context "MPlayer::SlaveCommands" do
     asserts("incorrect action") { @player.volume :boo }.equals false
 
     context "increases" do
-      setup { mock_send @player, "volume 1","Volume: 10 %\n",/Volume/ }
+      setup { mock_command @player, "volume 1","Volume: 10 %\n",/Volume/ }
       asserts("returns true") { @player.volume :up }.equals "10"
     end
 
     context "decreases" do
-      setup { mock_send @player, "volume 0","Volume: 10 %\n",/Volume/ }
+      setup { mock_command @player, "volume 0","Volume: 10 %\n",/Volume/ }
       asserts("returns true") { @player.volume :down }.equals "10"
     end
 
     context "sets volume" do
-      setup { mock_send @player, "volume 40 1","Volume: 10 %\n",/Volume/ }
+      setup { mock_command @player, "volume 40 1","Volume: 10 %\n",/Volume/ }
       asserts("returns true") { @player.volume :set,40 }.equals "10"
     end
   end
@@ -38,43 +38,43 @@ context "MPlayer::SlaveCommands" do
   context "seek" do
 
     context "by relative" do
-      setup { mock_send @player, "seek 5 0","Position: 10 %\n",/Position/ }
+      setup { mock_command @player, "seek 5 0","Position: 10 %\n",/Position/ }
       asserts("seek 5") { @player.seek 5 }
     end
 
     context "explicit relative" do
-      setup { mock_send @player, "seek 5 0","Position: 10 %\n",/Position/ }
+      setup { mock_command @player, "seek 5 0","Position: 10 %\n",/Position/ }
       asserts("seek 5,:relative") { @player.seek 5,:relative }.equals "10"
     end
 
     context "by percentage" do
-      setup { mock_send @player, "seek 5 1","Position: 10 %\n",/Position/ }
+      setup { mock_command @player, "seek 5 1","Position: 10 %\n",/Position/ }
       asserts("seek 5,:percent") { @player.seek 5,:percent }.equals "10"
     end
 
     context "by absolute" do
-      setup { mock_send @player, "seek 5 2","Position: 10 %\n",/Position/ }
+      setup { mock_command @player, "seek 5 2","Position: 10 %\n",/Position/ }
       asserts("seek 5,:absolute") { @player.seek 5,:absolute }.equals "10"
     end
   end
 
   context "edl_mark" do
-    setup { mock_send @player, "edl_mark"}
+    setup { mock_command @player, "edl_mark"}
     asserts("returns true") { @player.edl_mark }
   end
 
   context "speed_incr" do
-    setup { mock_send @player, "speed_incr 5","Speed: x   10",/Speed/ }
+    setup { mock_command @player, "speed_incr 5","Speed: x   10",/Speed/ }
     asserts("speed_incr 5") { @player.speed_incr 5 }.equals "10"
   end
 
   context "speed_mult" do
-    setup { mock_send @player, "speed_mult 5","Speed: x   10",/Speed/ }
+    setup { mock_command @player, "speed_mult 5","Speed: x   10",/Speed/ }
     asserts("speed_mult 5") { @player.speed_mult 5 }.equals "10"
   end
 
   context "speed_set" do
-    setup { mock_send @player, "speed_set 5","Speed: x   10",/Speed/ }
+    setup { mock_command @player, "speed_set 5","Speed: x   10",/Speed/ }
     asserts("speed_set 5") { @player.speed_set 5 }.equals "10"
   end
 
@@ -108,24 +108,24 @@ context "MPlayer::SlaveCommands" do
   end
 
   context "frame_step" do
-    setup { mock_send @player, "frame_step" }
+    setup { mock_command @player, "frame_step" }
     asserts("returns true") { @player.frame_step }
   end
 
   context "pt_step" do
 
     context "forced" do
-      setup { mock_send @player, "pt_step 5 1" }
+      setup { mock_command @player, "pt_step 5 1" }
       asserts("pt_step 5, :force") { @player.pt_step 5, :force }
     end
 
     context "not forced" do
-      setup { mock_send @player, "pt_step 5 0"  }
+      setup { mock_command @player, "pt_step 5 0"  }
       asserts("pt_step 5") {  @player.pt_step 5 }
     end
 
     context "explicit not forced" do
-      setup { mock_send @player, "pt_step 5 0"  }
+      setup { mock_command @player, "pt_step 5 0"  }
       asserts("pt_step 5, :no_force") { @player.pt_step 5, :no_force }
     end
   end
@@ -133,68 +133,68 @@ context "MPlayer::SlaveCommands" do
   context "pt_up_step" do
 
     context "forced" do
-      setup { mock_send @player, "pt_up_step 5 1"}
+      setup { mock_command @player, "pt_up_step 5 1"}
       asserts("pt_up_step 5, :force") { @player.pt_up_step 5, :force }
     end
 
     context "not forced" do
-      setup { mock_send @player, "pt_up_step 5 0" }
+      setup { mock_command @player, "pt_up_step 5 0" }
       asserts("pt_up_step 5") { @player.pt_up_step 5 }
     end
 
     context "explicit not forced" do
-      setup { mock_send @player, "pt_up_step 5 0" }
+      setup { mock_command @player, "pt_up_step 5 0" }
       asserts("pt_up_step 5, :no_force") { @player.pt_up_step 5, :no_force }
     end
   end
 
   context "alt_src_step" do
-    setup { mock_send @player, "alt_src_step 5" }
+    setup { mock_command @player, "alt_src_step 5" }
     asserts("returns true") { @player.alt_src_step 5 }
   end
 
   context "loop" do
 
     context "none" do
-      setup { mock_send @player,"loop -1" }
+      setup { mock_command @player,"loop -1" }
       asserts("loop :none") { @player.loop :none }
     end
 
     context "forever" do
-      setup { mock_send @player, "loop 0" }
+      setup { mock_command @player, "loop 0" }
       asserts("loop") { @player.loop }
     end
 
     context "explicit forever" do
-      setup { mock_send @player, "loop 0" }
+      setup { mock_command @player, "loop 0" }
       asserts("loop :forever") { @player.loop :forever }
     end
 
     context "set value" do
-      setup { mock_send @player,"loop 5" }
+      setup { mock_command @player,"loop 5" }
       asserts("loop :set, 5") { @player.loop :set, 5 }
     end
   end
 
   context "use_master" do
-    setup { mock_send @player, "use_master" }
+    setup { mock_command @player, "use_master" }
     asserts("returns true") { @player.use_master }
   end
 
   context "mute" do
 
     context "toggle" do
-      setup { mock_send @player, "mute", "Mute: enabled",/Mute/}
+      setup { mock_command @player, "mute", "Mute: enabled",/Mute/}
       asserts("returns true") { @player.mute }.equals "enabled"
     end
 
     context "set on" do
-      setup { mock_send @player, "mute 1","Mute: enabled",/Mute/}
+      setup { mock_command @player, "mute 1","Mute: enabled",/Mute/}
       asserts("mute :on") { @player.mute :on }.equals "enabled"
     end
 
     context "set off" do
-      setup { mock_send @player, "mute 0","Mute: enabled",/Mute/}
+      setup { mock_command @player, "mute 0","Mute: enabled",/Mute/}
       asserts("mute :off") { @player.mute :off }.equals "enabled"
     end
   end
@@ -211,7 +211,7 @@ context "MPlayer::SlaveCommands" do
         when "file_name" then "ANS_FILENAME"
         else "ANS_#{info.upcase}"
         end
-        setup { mock_send @player, "get_#{info}","#{resp}='100'",/#{resp}/ }
+        setup { mock_command @player, "get_#{info}","#{resp}='100'",/#{resp}/ }
         asserts("get :#{info}") { @player.get info.to_sym }
       end
     end
@@ -221,17 +221,17 @@ context "MPlayer::SlaveCommands" do
 
     asserts("invalid file") { @player.load_file 'booger' }.raises ArgumentError,"Invalid File"
     context "append" do
-      setup { mock_send @player, "loadfile test/test.mp3 1" }
+      setup { mock_command @player, "loadfile test/test.mp3 1" }
       asserts("load_file test/test.mp3, :append") { @player.load_file 'test/test.mp3', :append }
     end
 
     context "no append" do
-      setup { mock_send @player, "loadfile test/test.mp3 0" }
+      setup { mock_command @player, "loadfile test/test.mp3 0" }
       asserts("load_file test/test.mp3") { @player.load_file 'test/test.mp3' }
     end
 
     context "explicit no append" do
-      setup { mock_send @player, "loadfile test/test.mp3 0" }
+      setup { mock_command @player, "loadfile test/test.mp3 0" }
       asserts("load_file test/test.mp3, :no_append") { @player.load_file 'test/test.mp3', :no_append }
     end
   end
@@ -240,24 +240,24 @@ context "MPlayer::SlaveCommands" do
 
     asserts("invalid playlist") { @player.load_list 'booger' }.raises ArgumentError,"Invalid File"
     context "append" do
-      setup { mock_send @player, "loadlist test/test.mp3 1" }
+      setup { mock_command @player, "loadlist test/test.mp3 1" }
       asserts("load_list test/test.mp3, :append") { @player.load_list 'test/test.mp3', :append }
     end
 
     context "no append" do
-      setup { mock_send @player, "loadlist test/test.mp3 0" }
+      setup { mock_command @player, "loadlist test/test.mp3 0" }
       asserts("load_list test/test.mp3") { @player.load_list 'test/test.mp3' }
       # asserts("load_list test/test.mp3, :no_append") { @player.load_list 'test/test.mp3', :no_append }
     end
 
     context "explicit no append" do
-      setup { mock_send @player, "loadlist test/test.mp3 0" }
+      setup { mock_command @player, "loadlist test/test.mp3 0" }
       asserts("load_list test/test.mp3, :no_append") { @player.load_list 'test/test.mp3', :no_append }
     end
   end
 
   context "balance" do
-    setup { mock_send @player, "balance 2.1" }
+    setup { mock_command @player, "balance 2.1" }
     asserts("blance 2.1") { @player.balance 2.1 }
   end
 

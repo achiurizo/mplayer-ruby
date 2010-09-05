@@ -12,7 +12,7 @@ module MPlayer
       when :set then "volume #{value} 1"
       else return false
       end
-      resp = send cmd, /Volume/
+      resp = command cmd, /Volume/
       resp.gsub("Volume: ","").gsub(" %\n","")
     end
 
@@ -26,7 +26,7 @@ module MPlayer
       when :absolute then "seek #{value} 2"
       else "seek #{value} 0"
       end
-      resp = send command, /Position/
+      resp = command command, /Position/
       resp.gsub("Position: ","").gsub(" %\n","")
     end
 
@@ -47,7 +47,7 @@ module MPlayer
     # :forever means loop forever.(default)
     # :set sets the amount of times to loop. defaults to one loop.
     def loop(action = :forever,value = 1)
-      send case action
+      command case action
       when :none then "loop -1"
       when :set then "loop #{value}"
       else "loop 0"
@@ -59,7 +59,7 @@ module MPlayer
     # If no entry is available in the given direction it will do
     # nothing unless :force
     def pt_step(value,force = :no_force)
-      send(force == :force ? "pt_step #{value} 1" : "pt_step #{value} 0")
+      command(force == :force ? "pt_step #{value} 1" : "pt_step #{value} 0")
     end
 
     # goes to the next entry in the playlist denoted by value.
@@ -77,11 +77,11 @@ module MPlayer
     # Similar to pt_step but jumps to the next/previous entry in the parent list.
     # Useful to break out of the inner loop in the playtree.
     def pt_up_step(value,force = :no_force)
-      send(force == :force ? "pt_up_step #{value} 1" : "pt_up_step #{value} 0")
+      command(force == :force ? "pt_up_step #{value} 1" : "pt_up_step #{value} 0")
     end
 
     # Switch volume control between master and PCM.
-    def use_master; send("use_master"); end
+    def use_master; command("use_master"); end
 
     # Toggle sound output muting or set it to [value] when [value] >= 0
     #     (1 == on, 0 == off).
@@ -103,7 +103,7 @@ module MPlayer
       when "file_name" then "ANS_FILENAME"
       else "ANS_#{field.upcase}"
       end
-      send("get_#{value}",/#{match}/).gsub("#{match}=","").gsub("'","")
+      command("get_#{value}",/#{match}/).gsub("#{match}=","").gsub("'","")
     end
 
     # This gives methods for each of the fields that data can be extract on.
@@ -129,7 +129,7 @@ module MPlayer
     def load_file(file,append = :no_append)
       raise ArgumentError,"Invalid File" unless File.exists? file
       switch = (append == :append ? 1 : 0)
-      send "loadfile #{file} #{switch}"
+      command "loadfile #{file} #{switch}"
     end
 
     # Loads the playlist into MPlayer
@@ -138,12 +138,12 @@ module MPlayer
     def load_list(file,append = :no_append)
       raise ArgumentError,"Invalid File" unless File.exists? file
       switch = (append == :append ? 1 : 0)
-      send "loadlist #{file} #{switch}"
+      command "loadlist #{file} #{switch}"
     end
 
     # When more than one source is available it selects the next/previous one.
     # ASX Playlist ONLY
-    def alt_src_step(value); send("alt_src_step #{value}"); end
+    def alt_src_step(value); command("alt_src_step #{value}"); end
 
     # Add <value> to the current playback speed.
     def speed_incr(value)
@@ -163,21 +163,21 @@ module MPlayer
 
     #set balance to <value>
     def balance(value)
-      send("balance #{value}")
+      command("balance #{value}")
     end
     
     # Play one frame, then pause again.
-    def frame_step; send("frame_step"); end
+    def frame_step; command("frame_step"); end
 
     # Write the current position into the EDL file.
-    def edl_mark; send("edl_mark"); end
+    def edl_mark; command("edl_mark"); end
 
     # Pauses/Unpauses the file.
-    def pause; send("pause") ; end
+    def pause; command("pause") ; end
 
     # Quits MPlayer
     def quit
-      send('quit')
+      command('quit')
       @stdin.close
     end
 
@@ -185,7 +185,7 @@ module MPlayer
     
     def speed_setting(command,value)
       raise ArgumentError,"Value must be less than 6" unless value <= 5
-      send("#{command} #{value}",/Speed/).gsub("Speed: x   ","")
+      command("#{command} #{value}",/Speed/).gsub("Speed: x   ","")
     end
 
   end

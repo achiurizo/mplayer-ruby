@@ -14,7 +14,7 @@ module MPlayer
     def sub_step(value, type = :next)
       val = value.abs
       type = :prev if value < 0
-      send(type == :next ? "sub_step #{val}" : "sub_step #{-val}" )
+      command(type == :next ? "sub_step #{val}" : "sub_step #{-val}" )
     end
 
     # Adjust/set subtitle position.
@@ -29,7 +29,7 @@ module MPlayer
     # :center sets center alignment
     # :bottom sets bottom alignment
     def sub_alignment(alignment = nil)
-      send case alignment
+      command case alignment
       when :top then "sub_alignment 0"
       when :center then "sub_alignment 1"
       when :bottom then "sub_alignment 2"
@@ -48,7 +48,7 @@ module MPlayer
     # Loads subtitles from <file>.
     def sub_load(file)
       raise ArgumentError, "Invalid File" unless File.exists? file
-      send("sub_load #{file}")
+      command("sub_load #{file}")
     end
 
     # Removes the selected sub file
@@ -56,7 +56,7 @@ module MPlayer
     # <value> removes the sub file at that index.
     def sub_remove(value = :all)
       cmd = (value == :all ? -1 : value)
-      send "sub_remove #{cmd}"
+      command "sub_remove #{cmd}"
     end
 
     # Displays subtitle
@@ -64,7 +64,7 @@ module MPlayer
     # <value> will display the sub_title at that index.
     def sub_select(value = :cycle)
       cmd = (value == :cycle ? -2 : value)
-      send "sub_select #{cmd}"
+      command "sub_select #{cmd}"
     end
 
     #  Display first subtitle from <value>
@@ -81,7 +81,7 @@ module MPlayer
       when :off then -1
       else -2
       end
-      send "sub_source #{switch}"
+      command "sub_source #{switch}"
     end
 
     # Display subtitle specifid by <value> for file subs. corresponding to ID_FILE_SUB_ID

@@ -3,7 +3,7 @@ module MPlayer
     
     # Start automatic TV channel scanning
     def tv_start_scan
-      send("tv_start_scan")
+      command("tv_start_scan")
     end
     
     # Select the next/previous TV Channel
@@ -11,7 +11,7 @@ module MPlayer
     # :prev select previous channel
     def tv_step_channel(action)
       value = action ==  :prev ? -1 : 1
-      send "tv_step_channel #{value}"
+      command "tv_step_channel #{value}"
     end
     
     # next TV channel
@@ -26,39 +26,39 @@ module MPlayer
     
     # Change TV norm
     def tv_step_norm
-      send("tv_step_norm")
+      command("tv_step_norm")
     end
     
     # Change TV Channel list
     def tv_step_chanlist
-      send("tv_step_chanlist")
+      command("tv_step_chanlist")
     end
     
     # Set TV Channel to <value>
     def tv_set_channel(value)
-      send("tv_set_channel #{value}")
+      command("tv_set_channel #{value}")
     end
     alias :set_channel :tv_set_channel
     
     # Set the current TV Channel to the last channel
     def tv_last_channel
-      send("tv_last_channel")
+      command("tv_last_channel")
     end
     alias :last_channel :tv_last_channel
     
     # set TV Frequency in MHz
     def tv_set_freq(value)
-      send("tv_set_freq #{value}")
+      command("tv_set_freq #{value}")
     end
     
     # set the TV frequency relative to the current frequency
     def tv_step_freq(value)
-      send("tv_step_freq #{value}")
+      command("tv_step_freq #{value}")
     end
     
     # Set the TV tuner norm (PAL, SECAM, NTSC, ... ).
     def tv_set_norm(value)
-      send("tv_set_norm #{value.to_s.upcase}")
+      command("tv_set_norm #{value.to_s.upcase}")
     end
     
     # Set/adjust video parameters.
