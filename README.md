@@ -1,4 +1,4 @@
-# mplayer-ruby
+# mplayer-ruby [![](http://stillmaintained.com/user/project.png)](http://stillmaintained.com/user/project)
 
 A Ruby Wrapper for MPlayer. Controls MPlayer via the Slave Protocol.
 
