@@ -1,5 +1,7 @@
 # mplayer-ruby [![](http://stillmaintained.com/achiu/mplayer-ruby.png)](http://stillmaintained.com/achiu/mplayer-ruby)
 
+### This is now maintained by [petems](https://github.com/petems/mplayer-ruby). Check out his maintained [branch](https://github.com/petems/mplayer-ruby)!
+
 A Ruby Wrapper for MPlayer. Controls MPlayer via the Slave Protocol.
 
 See [RDOC](http://mplayer-ruby.rubyforge.org/mplayer-ruby/index.html) for additional information.
